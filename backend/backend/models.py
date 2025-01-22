@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import JSON, func
+from sqlalchemy import JSON, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, registry, relationship
 
 table_registry = registry()
@@ -30,7 +30,7 @@ class Template:
     __tablename__ = 'templates'
 
     id: Mapped[int] = mapped_column(init=False, primary_key=True)
-    user_id: Mapped[int] = mapped_column(init=False, foreign_key='users.id')
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), init=False)
     name: Mapped[str]
     products: Mapped[JSON] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(
@@ -46,9 +46,9 @@ class List:
     __tablename__ = 'lists'
 
     id: Mapped[int] = mapped_column(init=False, primary_key=True)
-    user_id: Mapped[int] = mapped_column(init=False, foreign_key='users.id')
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), init=False)
     template_id: Mapped[int] = mapped_column(
-        init=False, foreign_key='templates.id', nullable=True
+        ForeignKey('templates.id'), init=False, nullable=True
     )
     name: Mapped[str]
     total: Mapped[float]
@@ -68,8 +68,8 @@ class Product:
     __tablename__ = 'products'
 
     id: Mapped[int] = mapped_column(init=False, primary_key=True)
-    user_id: Mapped[int] = mapped_column(init=False, foreign_key='users.id')
-    list_id: Mapped[int] = mapped_column(init=False, foreign_key='lists.id')
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), init=False)
+    list_id: Mapped[int] = mapped_column(ForeignKey('lists.id'), init=False)
     name: Mapped[str]
     quantity: Mapped[float]
     bestPrice: Mapped[float]
@@ -90,10 +90,10 @@ class Brand:
     __tablename__ = 'brands'
 
     id: Mapped[int] = mapped_column(init=False, primary_key=True)
-    user_id: Mapped[int] = mapped_column(init=False, foreign_key='users.id')
-    list_id: Mapped[int] = mapped_column(init=False, foreign_key='lists.id')
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), init=False)
+    list_id: Mapped[int] = mapped_column(ForeignKey('lists.id'), init=False)
     product_id: Mapped[int] = mapped_column(
-        init=False, foreign_key='products.id'
+        ForeignKey('products.id'), init=False
     )
     name: Mapped[str]
     quantity: Mapped[float]
