@@ -1,0 +1,25 @@
+services:
+  backend_db:
+    image: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: app_user
+      POSTGRES_DB: backend_db
+      POSTGRES_PASSWORD: app_password
+    ports:
+      - '5432:5432'
+
+  backend_app:
+    image: backend_app
+    entrypoint: ./entrypoint.sh
+    build: .
+    ports:
+      - '8000:8000'
+    depends_on:
+      - backend_db
+    environment:
+      DATABASE_URL: 'postgresql+psycopg://app_user:app_password@backend_db:5432/backend_db'
+
+volumes:
+  pgdata:
