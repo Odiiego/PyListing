@@ -1,8 +1,8 @@
-"""fix product reference in brand model
+"""fix in the initialization from some ids
 
-Revision ID: e42a5bf225e6
-Revises: de40bd4e5b54
-Create Date: 2025-01-23 04:07:33.781086
+Revision ID: e26058554c59
+Revises: 4185fd2acab8
+Create Date: 2025-01-23 17:15:51.535034
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'e42a5bf225e6'
-down_revision: Union[str, None] = 'de40bd4e5b54'
+revision: str = 'e26058554c59'
+down_revision: Union[str, None] = '4185fd2acab8'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
