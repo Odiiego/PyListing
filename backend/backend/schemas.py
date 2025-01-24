@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, ConfigDict, EmailStr
 
 
@@ -29,3 +31,19 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: str | None = None
+
+
+class ShoppingListSchema(BaseModel):
+    name: str
+
+
+class ShoppingListPublic(BaseModel):
+    id: int
+    user_id: int
+    name: str
+    created_at: datetime
+    updated_at: datetime
+
+
+class ShoppingListList(BaseModel):
+    shopping_lists: list[ShoppingListPublic]
