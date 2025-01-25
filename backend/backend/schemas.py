@@ -47,3 +47,23 @@ class ShoppingListPublic(BaseModel):
 
 class ShoppingListList(BaseModel):
     shopping_lists: list[ShoppingListPublic]
+
+
+class ProductSchema(BaseModel):
+    name: str
+    quantity: int
+
+
+class ProductPublic(BaseModel):
+    id: int
+    list_id: int
+    name: str
+    quantity: int
+    best_price: float
+    best_offer: float
+    created_at: datetime
+    updated_at: datetime
+
+
+class ProductList(BaseModel):
+    products: list[ProductPublic]

@@ -47,8 +47,8 @@ class Product:
     )
     name: Mapped[str]
     quantity: Mapped[float]
-    best_price: Mapped[float]
-    best_offer: Mapped[float]
+    best_price: Mapped[float] = 0.0
+    best_offer: Mapped[float] = 0.0
     created_at: Mapped[datetime] = mapped_column(
         init=False, server_default=func.now()
     )
