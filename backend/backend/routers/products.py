@@ -131,7 +131,7 @@ def get_products_by_list(
 
 
 @router.get('/{product_id}', response_model=ProductPublic)
-def get_list_by_id(
+def get_products_by_list_id(
     product_id: int,
     session: T_Session,
     user: T_CurrentUser,

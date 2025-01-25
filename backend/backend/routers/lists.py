@@ -3,15 +3,16 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from backend.database import get_session
-from backend.models import ShoppingList, User
+from backend.models import Product, ShoppingList, User
 from backend.schemas import (
     Message,
     ShoppingListList,
     ShoppingListPublic,
     ShoppingListSchema,
+    ShoppingListThumbnailList,
 )
 from backend.security import get_current_user
 
@@ -66,7 +67,7 @@ def update_list(
     if not db_list:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
-            detail='List not found',
+            detail='Shopping list not found',
         )
 
     for key, value in list.model_dump(exclude_unset=True).items():
@@ -94,7 +95,7 @@ def delete_list(
     if not db_list:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
-            detail='List not found',
+            detail='Shopping list not found',
         )
 
     session.delete(db_list)
@@ -103,7 +104,7 @@ def delete_list(
     return {'message': 'List has been deleted successfully.'}
 
 
-@router.get('/', response_model=ShoppingListList)
+@router.get('/', response_model=ShoppingListThumbnailList)
 def get_lists_by_user(user: T_CurrentUser, session: T_Session):
     db_lists = session.scalars(
         select(ShoppingList).where(ShoppingList.user_id == user.id)
@@ -127,7 +128,7 @@ def get_list_by_id(
     if not db_list:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
-            detail='List not found',
+            detail='Shopping list not found',
         )
 
     session.add(db_list)

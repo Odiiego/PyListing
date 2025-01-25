@@ -37,18 +37,6 @@ class ShoppingListSchema(BaseModel):
     name: str
 
 
-class ShoppingListPublic(BaseModel):
-    id: int
-    user_id: int
-    name: str
-    created_at: datetime
-    updated_at: datetime
-
-
-class ShoppingListList(BaseModel):
-    shopping_lists: list[ShoppingListPublic]
-
-
 class ProductSchema(BaseModel):
     name: str
     quantity: int
@@ -67,3 +55,26 @@ class ProductPublic(BaseModel):
 
 class ProductList(BaseModel):
     products: list[ProductPublic]
+
+
+class ShoppingListPublic(BaseModel):
+    id: int
+    user_id: int
+    name: str
+    products: list[ProductPublic]
+    created_at: datetime
+    updated_at: datetime
+
+class ShoppingListThumbnail(BaseModel):
+    id: int
+    user_id: int
+    name: str
+    created_at: datetime
+    updated_at: datetime
+
+class ShoppingListList(BaseModel):
+    shopping_lists: list[ShoppingListPublic]
+
+
+class ShoppingListThumbnailList(BaseModel):
+    shopping_lists: list[ShoppingListThumbnail]

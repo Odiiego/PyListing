@@ -11,5 +11,5 @@ app.include_router(products.router)
 
 
 @app.get('/', response_model=str)
-def read_root():
+def default():
     return 'https://github.com/Odiiego/PyListing'
