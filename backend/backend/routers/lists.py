@@ -30,9 +30,9 @@ def create_list(
     user_id: int,
     list: ShoppingListSchema,
     session: T_Session,
-    current_user: T_CurrentUser,
+    user: T_CurrentUser,
 ):
-    if current_user.id != user_id:
+    if user.id != user_id:
         raise HTTPException(
             status_code=HTTPStatus.FORBIDDEN,
             detail='Not enough permissions',
