@@ -64,7 +64,6 @@ def update_product(
     db_product = session.scalar(
         select(Product).where(
             Product.id == product_id,
-            ShoppingList.id == Product.list_id,
             ShoppingList.user_id == user.id,
         )
     )
@@ -94,7 +93,6 @@ def delete_product(
     db_product = session.scalar(
         select(Product).where(
             Product.id == product_id,
-            ShoppingList.id == Product.list_id,
             ShoppingList.user_id == user.id,
         )
     )
@@ -111,27 +109,8 @@ def delete_product(
     return {'message': 'Product has been deleted successfully.'}
 
 
-@router.get('/{list_id}', response_model=ProductList)
-def get_products_by_list(
-    list_id: int,
-    session: T_Session,
-    user: T_CurrentUser,
-):
-    db_products = session.scalars(
-        select(Product)
-        .join(ShoppingList)
-        .where(
-            Product.list_id == list_id,
-            ShoppingList.id == list_id,
-            ShoppingList.user_id == user.id,
-        )
-    )
-
-    return {'products': db_products}
-
-
 @router.get('/{product_id}', response_model=ProductPublic)
-def get_products_by_list_id(
+def get_product_by_id(
     product_id: int,
     session: T_Session,
     user: T_CurrentUser,
@@ -139,7 +118,6 @@ def get_products_by_list_id(
     db_product = session.scalar(
         select(Product).where(
             Product.id == product_id,
-            ShoppingList.id == Product.list_id,
             ShoppingList.user_id == user.id,
         )
     )
@@ -151,3 +129,21 @@ def get_products_by_list_id(
         )
 
     return db_product
+
+
+@router.get('/list/{list_id}', response_model=ProductList)
+def get_products_by_list(
+    list_id: int,
+    session: T_Session,
+    user: T_CurrentUser,
+):
+    db_products = session.scalars(
+        select(Product)
+        .join(ShoppingList)
+        .where(
+            Product.list_id == list_id,
+            ShoppingList.user_id == user.id,
+        )
+    )
+
+    return {'products': db_products}

@@ -3,13 +3,12 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
 
 from backend.database import get_session
-from backend.models import Product, ShoppingList, User
+from backend.models import ShoppingList, User
 from backend.schemas import (
     Message,
-    ShoppingListList,
     ShoppingListPublic,
     ShoppingListSchema,
     ShoppingListThumbnailList,
