@@ -68,6 +68,12 @@ def update_product(
         )
     )
 
+    if not db_product.list.user_id == user.id:
+        raise HTTPException(
+            status_code=HTTPStatus.FORBIDDEN,
+            detail='Not enough permissions',
+        )
+
     if not db_product:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
@@ -97,6 +103,12 @@ def delete_product(
         )
     )
 
+    if not db_product.list.user_id == user.id:
+        raise HTTPException(
+            status_code=HTTPStatus.FORBIDDEN,
+            detail='Not enough permissions',
+        )
+
     if not db_product:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
@@ -121,6 +133,12 @@ def get_product_by_id(
             ShoppingList.user_id == user.id,
         )
     )
+
+    if not db_product.list.user_id == user.id:
+        raise HTTPException(
+            status_code=HTTPStatus.FORBIDDEN,
+            detail='Not enough permissions',
+        )
 
     if not db_product:
         raise HTTPException(
