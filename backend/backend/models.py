@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import ForeignKey, func
+from sqlalchemy import ForeignKey, Numeric, func
 from sqlalchemy.orm import Mapped, mapped_column, registry, relationship
 
 table_registry = registry()
@@ -60,8 +60,12 @@ class Product:
     list_id: Mapped[int] = mapped_column(ForeignKey('shopping_lists.id'))
     name: Mapped[str]
     quantity: Mapped[float]
-    best_price: Mapped[float] = 0.0
-    best_offer: Mapped[float] = 0.0
+    best_price: Mapped[float | None] = mapped_column(
+        Numeric(10, 2), nullable=True, default=None
+    )
+    best_offer: Mapped[float | None] = mapped_column(
+        Numeric(10, 2), nullable=True, default=None
+    )
     created_at: Mapped[datetime] = mapped_column(
         init=False, server_default=func.now()
     )
