@@ -22,6 +22,10 @@ class BrandSchema(BaseModel):
     quantity: float
     price: float
 
+class UpdateBrandSchema(BaseModel):
+    name: str | None = None
+    quantity: float | None = None
+    price: float | None = None
 
 class BrandPublic(BaseModel):
     id: int
@@ -44,6 +48,10 @@ class UserSchema(BaseModel):
     email: EmailStr
     password: str
 
+class UpdateUserSchema(BaseModel):
+    username: str | None = None
+    email: EmailStr | None = None
+    password: str | None = None
 
 class UserPublic(BaseModel):
     id: int
@@ -60,6 +68,9 @@ class ProductSchema(BaseModel):
     name: str
     quantity: int
 
+class UpdateProductSchema(BaseModel):
+    name: str | None = None
+    quantity: int | None = None
 
 class ProductPublic(BaseModel):
     id: int
@@ -80,6 +91,8 @@ class ProductList(BaseModel):
 class ShoppingListSchema(BaseModel):
     name: str
 
+class UpdateShoppingListSchema(BaseModel):
+    name: str | None = None
 
 class ShoppingListPublic(BaseModel):
     id: int

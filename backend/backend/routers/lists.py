@@ -12,6 +12,7 @@ from backend.schemas import (
     ShoppingListPublic,
     ShoppingListSchema,
     ShoppingListThumbnailList,
+    UpdateShoppingListSchema,
 )
 from backend.security import get_current_user
 
@@ -53,7 +54,7 @@ def create_list(
 @router.patch('/{list_id}', response_model=ShoppingListPublic)
 def update_list(
     list_id: int,
-    list: ShoppingListSchema,
+    list: UpdateShoppingListSchema,
     session: T_Session,
     user: T_CurrentUser,
 ):

@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from backend.database import get_session
 from backend.models import User
-from backend.schemas import Message, UserPublic, UserSchema
+from backend.schemas import Message, UpdateUserSchema, UserPublic, UserSchema
 from backend.security import get_current_user, get_password_hash
 
 router = APIRouter(prefix='/users', tags=['users'])
@@ -55,7 +55,7 @@ def create_user(user: UserSchema, session: T_Session):
 @router.put('/{user_id}', response_model=UserPublic)
 def update_user(
     user_id: int,
-    user: UserSchema,
+    user: UpdateUserSchema,
     session: T_Session,
     current_user: T_CurrentUser,
 ):

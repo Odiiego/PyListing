@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from backend.database import get_session
 from backend.models import Brand, Product, ShoppingList, User
-from backend.schemas import BrandList, BrandPublic, BrandSchema, Message
+from backend.schemas import BrandList, BrandPublic, BrandSchema, Message, UpdateBrandSchema
 from backend.security import get_current_user
 
 T_Session = Annotated[Session, Depends(get_session)]
@@ -72,7 +72,7 @@ def create_brand(
 @router.patch('/{brand_id}', response_model=BrandPublic)
 def update_brand(
     brand_id: int,
-    brand: BrandSchema,
+    brand: UpdateBrandSchema,
     session: T_Session,
     user: T_CurrentUser,
 ):

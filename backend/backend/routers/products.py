@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from backend.database import get_session
 from backend.models import Product, ShoppingList, User
-from backend.schemas import Message, ProductList, ProductPublic, ProductSchema
+from backend.schemas import Message, ProductList, ProductPublic, ProductSchema, UpdateProductSchema
 from backend.security import get_current_user
 
 T_Session = Annotated[Session, Depends(get_session)]
@@ -54,7 +54,7 @@ def create_product(
 @router.patch('/{product_id}', response_model=ProductPublic)
 def update_product(
     product_id: int,
-    product: ProductSchema,
+    product: UpdateProductSchema,
     session: T_Session,
     user: T_CurrentUser,
 ):
