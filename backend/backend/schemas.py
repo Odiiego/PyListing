@@ -1,10 +1,42 @@
 from datetime import datetime
+from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, EmailStr
 
 
 class Message(BaseModel):
     message: str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: str | None = None
+
+
+class BrandSchema(BaseModel):
+    name: str
+    quantity: float
+    price: float
+
+
+class BrandPublic(BaseModel):
+    id: int
+    product_id: int
+    name: str
+    quantity: float
+    price: Decimal
+    unity_cost: Decimal
+    predicted_cost: Decimal
+    created_at: datetime
+    updated_at: datetime
+
+
+class BrandList(BaseModel):
+    brands: list[BrandPublic]
 
 
 class UserSchema(BaseModel):
@@ -24,19 +56,6 @@ class UserList(BaseModel):
     users: list[UserPublic]
 
 
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-
-class TokenData(BaseModel):
-    username: str | None = None
-
-
-class ShoppingListSchema(BaseModel):
-    name: str
-
-
 class ProductSchema(BaseModel):
     name: str
     quantity: int
@@ -47,14 +66,19 @@ class ProductPublic(BaseModel):
     list_id: int
     name: str
     quantity: int
-    best_price: float
-    best_offer: float
+    brands: list[BrandPublic]
+    best_price: Decimal | None = None
+    best_offer: Decimal | None = None
     created_at: datetime
     updated_at: datetime
 
 
 class ProductList(BaseModel):
     products: list[ProductPublic]
+
+
+class ShoppingListSchema(BaseModel):
+    name: str
 
 
 class ShoppingListPublic(BaseModel):
@@ -65,15 +89,17 @@ class ShoppingListPublic(BaseModel):
     created_at: datetime
     updated_at: datetime
 
+
+class ShoppingListList(BaseModel):
+    shopping_lists: list[ShoppingListPublic]
+
+
 class ShoppingListThumbnail(BaseModel):
     id: int
     user_id: int
     name: str
     created_at: datetime
     updated_at: datetime
-
-class ShoppingListList(BaseModel):
-    shopping_lists: list[ShoppingListPublic]
 
 
 class ShoppingListThumbnailList(BaseModel):

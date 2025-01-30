@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from math import ceil
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -28,17 +29,16 @@ def create_product(
     db_list = session.scalar(
         select(ShoppingList).where(ShoppingList.id == list_id)
     )
+    if not db_list:
+        raise HTTPException(
+            status_code=HTTPStatus.NOT_FOUND,
+            detail='List not found',
+        )
 
     if db_list.user_id != user.id:
         raise HTTPException(
             status_code=HTTPStatus.FORBIDDEN,
             detail='Not enough permissions',
-        )
-
-    if not db_list:
-        raise HTTPException(
-            status_code=HTTPStatus.NOT_FOUND,
-            detail='List not found',
         )
 
     db_product = Product(
@@ -67,21 +67,38 @@ def update_product(
             ShoppingList.user_id == user.id,
         )
     )
-
-    if not db_product.list.user_id == user.id:
-        raise HTTPException(
-            status_code=HTTPStatus.FORBIDDEN,
-            detail='Not enough permissions',
-        )
-
     if not db_product:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
             detail='Product not found',
         )
 
+    if not db_product.shopping_list.user_id == user.id:
+        raise HTTPException(
+            status_code=HTTPStatus.FORBIDDEN,
+            detail='Not enough permissions',
+        )
+
     for key, value in product.model_dump(exclude_unset=True).items():
         setattr(db_product, key, value)
+
+    if product.quantity is not None and db_product.brands:
+        for brand in db_product.brands:
+            brand.unity_cost = brand.price / brand.quantity
+            brand.predicted_cost = (
+                ceil(product.quantity / brand.quantity) * brand.price
+            )
+
+            if (
+                db_product.best_offer is None
+                or db_product.best_offer > brand.unity_cost
+            ):
+                db_product.best_offer = brand.unity_cost
+            if (
+                db_product.best_price is None
+                or db_product.best_price > brand.predicted_cost
+            ):
+                db_product.best_price = brand.predicted_cost
 
     session.add(db_product)
     session.commit()
@@ -103,18 +120,17 @@ def delete_product(
         )
     )
 
-    if not db_product.list.user_id == user.id:
-        raise HTTPException(
-            status_code=HTTPStatus.FORBIDDEN,
-            detail='Not enough permissions',
-        )
-
     if not db_product:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
             detail='Product not found',
         )
 
+    if not db_product.shopping_list.user_id == user.id:
+        raise HTTPException(
+            status_code=HTTPStatus.FORBIDDEN,
+            detail='Not enough permissions',
+        )
     session.delete(db_product)
     session.commit()
 
@@ -134,16 +150,16 @@ def get_product_by_id(
         )
     )
 
-    if not db_product.list.user_id == user.id:
-        raise HTTPException(
-            status_code=HTTPStatus.FORBIDDEN,
-            detail='Not enough permissions',
-        )
-
     if not db_product:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
             detail='Product not found',
+        )
+
+    if not db_product.shopping_list.user_id == user.id:
+        raise HTTPException(
+            status_code=HTTPStatus.FORBIDDEN,
+            detail='Not enough permissions',
         )
 
     return db_product

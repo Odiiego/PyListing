@@ -59,7 +59,7 @@ class Product:
     id: Mapped[int] = mapped_column(init=False, primary_key=True)
     list_id: Mapped[int] = mapped_column(ForeignKey('shopping_lists.id'))
     name: Mapped[str]
-    quantity: Mapped[float]
+    quantity: Mapped[float] = mapped_column(Numeric(10, 2))
     best_price: Mapped[float | None] = mapped_column(
         Numeric(10, 2), nullable=True, default=None
     )
@@ -90,10 +90,10 @@ class Brand:
     id: Mapped[int] = mapped_column(init=False, primary_key=True)
     product_id: Mapped[int] = mapped_column(ForeignKey('products.id'))
     name: Mapped[str]
-    quantity: Mapped[float]
-    price: Mapped[float]
-    unity_cost: Mapped[float]
-    predicted_cost: Mapped[float]
+    quantity: Mapped[float] = mapped_column(Numeric(10, 2))
+    price: Mapped[float] = mapped_column(Numeric(10, 2))
+    unity_cost: Mapped[float] = mapped_column(Numeric(10, 2))
+    predicted_cost: Mapped[float] = mapped_column(Numeric(10, 2))
     created_at: Mapped[datetime] = mapped_column(
         init=False, server_default=func.now()
     )
