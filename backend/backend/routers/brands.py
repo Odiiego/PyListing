@@ -29,16 +29,10 @@ def create_brand(
     user: T_CurrentUser,
 ):
     db_product = session.scalar(
-        select(Product).where(
-            Product.id == product_id, ShoppingList.user_id == user.id
-        )
+        select(Product)
+        .join(ShoppingList, Product.list_id == ShoppingList.id)
+        .where(Product.id == product_id, ShoppingList.user_id == user.id)
     )
-
-    if db_product.shopping_list.user_id != user.id:
-        raise HTTPException(
-            status_code=HTTPStatus.FORBIDDEN,
-            detail='Not enough permissions',
-        )
 
     if not db_product:
         raise HTTPException(
@@ -83,18 +77,11 @@ def update_brand(
     user: T_CurrentUser,
 ):
     db_brand = session.scalar(
-        select(Brand).where(
-            Brand.id == brand_id,
-            Product.id == Brand.product_id,
-            ShoppingList.user_id == user.id,
-        )
+        select(Brand)
+        .join(Product, Brand.product_id == Product.id)
+        .join(ShoppingList, Product.list_id == ShoppingList.id)
+        .where(Brand.id == brand_id, ShoppingList.user_id == user.id)
     )
-
-    if not db_brand.product.shopping_list.user_id == user.id:
-        raise HTTPException(
-            status_code=HTTPStatus.FORBIDDEN,
-            detail='Not enough permissions',
-        )
 
     if not db_brand:
         raise HTTPException(
@@ -105,7 +92,7 @@ def update_brand(
     for key, value in brand.model_dump(exclude_unset=True).items():
         setattr(db_brand, key, value)
 
-    db_brand.unity_cost = brand.price / brand.quantity
+    db_brand.unity_cost = float(brand.price) / brand.quantity
     db_brand.predicted_cost = (
         ceil(float(db_brand.product.quantity) / brand.quantity) * brand.price
     )
@@ -136,18 +123,11 @@ def update_brand(
 @router.delete('/{brand_id}', response_model=Message)
 def delete_brand(brand_id: int, session: T_Session, user: T_CurrentUser):
     db_brand = session.scalar(
-        select(Brand).where(
-            Brand.id == brand_id,
-            Product.id == Brand.product_id,
-            ShoppingList.user_id == user.id,
-        )
+        select(Brand)
+        .join(Product, Brand.product_id == Product.id)
+        .join(ShoppingList, Product.list_id == ShoppingList.id)
+        .where(Brand.id == brand_id, ShoppingList.user_id == user.id)
     )
-
-    if not db_brand.product.shopping_list.user_id == user.id:
-        raise HTTPException(
-            status_code=HTTPStatus.FORBIDDEN,
-            detail='Not enough permissions',
-        )
 
     if not db_brand:
         raise HTTPException(
@@ -186,18 +166,11 @@ def delete_brand(brand_id: int, session: T_Session, user: T_CurrentUser):
 @router.get('/{brand_id}', response_model=BrandPublic)
 def get_brand_by_id(brand_id: int, session: T_Session, user: T_CurrentUser):
     db_brand = session.scalar(
-        select(Brand).where(
-            Brand.id == brand_id,
-            Product.id == Brand.product_id,
-            ShoppingList.user_id == user.id,
-        )
+        select(Brand)
+        .join(Product, Brand.product_id == Product.id)
+        .join(ShoppingList, Product.list_id == ShoppingList.id)
+        .where(Brand.id == brand_id, ShoppingList.user_id == user.id)
     )
-
-    if not db_brand.product.shopping_list.user_id == user.id:
-        raise HTTPException(
-            status_code=HTTPStatus.FORBIDDEN,
-            detail='Not enough permissions',
-        )
 
     if not db_brand:
         raise HTTPException(
@@ -214,12 +187,9 @@ def get_brands_by_product(
 ):
     db_brands = session.scalars(
         select(Brand)
-        .join(Product)
-        .where(
-            Brand.product_id == product_id,
-            Product.list_id == ShoppingList.id,
-            ShoppingList.user_id == user.id,
-        )
+        .join(Product, Brand.product_id == product_id)
+        .join(ShoppingList, Product.list_id == ShoppingList.id)
+        .where(ShoppingList.user_id == user.id)
     )
 
     return {'brands': db_brands}

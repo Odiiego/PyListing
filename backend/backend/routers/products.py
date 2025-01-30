@@ -27,18 +27,15 @@ def create_product(
     user: T_CurrentUser,
 ):
     db_list = session.scalar(
-        select(ShoppingList).where(ShoppingList.id == list_id)
+        select(ShoppingList).where(
+            ShoppingList.id == list_id, ShoppingList.user_id == user.id
+        )
     )
+
     if not db_list:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
             detail='List not found',
-        )
-
-    if db_list.user_id != user.id:
-        raise HTTPException(
-            status_code=HTTPStatus.FORBIDDEN,
-            detail='Not enough permissions',
         )
 
     db_product = Product(
@@ -62,21 +59,18 @@ def update_product(
     user: T_CurrentUser,
 ):
     db_product = session.scalar(
-        select(Product).where(
+        select(Product)
+        .join(ShoppingList, Product.list_id == ShoppingList.id)
+        .where(
             Product.id == product_id,
             ShoppingList.user_id == user.id,
         )
     )
+
     if not db_product:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
             detail='Product not found',
-        )
-
-    if not db_product.shopping_list.user_id == user.id:
-        raise HTTPException(
-            status_code=HTTPStatus.FORBIDDEN,
-            detail='Not enough permissions',
         )
 
     for key, value in product.model_dump(exclude_unset=True).items():
@@ -114,7 +108,9 @@ def delete_product(
     user: T_CurrentUser,
 ):
     db_product = session.scalar(
-        select(Product).where(
+        select(Product)
+        .join(ShoppingList, Product.list_id == ShoppingList.id)
+        .where(
             Product.id == product_id,
             ShoppingList.user_id == user.id,
         )
@@ -126,11 +122,6 @@ def delete_product(
             detail='Product not found',
         )
 
-    if not db_product.shopping_list.user_id == user.id:
-        raise HTTPException(
-            status_code=HTTPStatus.FORBIDDEN,
-            detail='Not enough permissions',
-        )
     session.delete(db_product)
     session.commit()
 
@@ -144,7 +135,9 @@ def get_product_by_id(
     user: T_CurrentUser,
 ):
     db_product = session.scalar(
-        select(Product).where(
+        select(Product)
+        .join(ShoppingList, Product.list_id == ShoppingList.id)
+        .where(
             Product.id == product_id,
             ShoppingList.user_id == user.id,
         )
@@ -154,12 +147,6 @@ def get_product_by_id(
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
             detail='Product not found',
-        )
-
-    if not db_product.shopping_list.user_id == user.id:
-        raise HTTPException(
-            status_code=HTTPStatus.FORBIDDEN,
-            detail='Not enough permissions',
         )
 
     return db_product
