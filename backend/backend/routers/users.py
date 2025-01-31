@@ -31,10 +31,10 @@ def create_user(user: UserSchema, session: T_Session):
                 status_code=HTTPStatus.CONFLICT,
                 detail='Username already exists',
             )
-        elif db_user.username == user.username:
+        elif db_user.email == user.email:
             raise HTTPException(
                 status_code=HTTPStatus.CONFLICT,
-                detail='Username already exists',
+                detail='Email already exists',
             )
 
     hashed_password = get_password_hash(user.password)
@@ -64,6 +64,7 @@ def update_user(
             status_code=HTTPStatus.FORBIDDEN,
             detail='Not enough permissions',
         )
+    
     try:
         current_user.username = user.username
         current_user.email = user.email
@@ -76,7 +77,7 @@ def update_user(
     except IntegrityError:
         raise HTTPException(
             status_code=HTTPStatus.CONFLICT,
-            detail='Username or email already exists',
+            detail='Username or Email already exists',
         )
 
 
