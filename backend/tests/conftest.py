@@ -10,7 +10,7 @@ from testcontainers.postgres import PostgresContainer
 
 from backend.app import app
 from backend.database import get_session
-from backend.models import User, table_registry
+from backend.models import ShoppingList, User, table_registry
 from backend.security import get_password_hash
 
 
@@ -81,6 +81,16 @@ def user(session):
 
 
 @pytest.fixture
+def shopping_list(session):
+    shopping_list = ShoppingListFactory()
+    session.add(shopping_list)
+    session.commit()
+    session.refresh(shopping_list)
+
+    return shopping_list
+
+
+@pytest.fixture
 def other_user(session):
     password = 'testtest'
     user = UserFactory(
@@ -111,3 +121,11 @@ class UserFactory(factory.Factory):
     username = factory.Sequence(lambda n: f'test{n}')
     email = factory.LazyAttribute(lambda obj: f'{obj.username}@test.com')
     password = factory.LazyAttribute(lambda obj: f'{obj.username}@example.com')
+
+
+class ShoppingListFactory(factory.Factory):
+    class Meta:
+        model = ShoppingList
+
+    name = factory.Faker('text')
+    user_id = 1
