@@ -51,7 +51,7 @@ def create_list(
     return db_list
 
 
-@router.patch('/{list_id}', response_model=ShoppingListPublic)
+@router.put('/{list_id}', response_model=ShoppingListPublic)
 def update_list(
     list_id: int,
     list: UpdateShoppingListSchema,
@@ -101,7 +101,7 @@ def delete_list(
     session.delete(db_list)
     session.commit()
 
-    return {'message': 'List has been deleted successfully.'}
+    return {'message': 'Shopping List has been deleted successfully.'}
 
 
 @router.get('/', response_model=ShoppingListThumbnailList)
