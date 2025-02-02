@@ -64,7 +64,7 @@ def update_user(
             status_code=HTTPStatus.FORBIDDEN,
             detail='Not enough permissions',
         )
-    
+
     try:
         current_user.username = user.username
         current_user.email = user.email
