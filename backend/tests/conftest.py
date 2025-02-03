@@ -1,5 +1,6 @@
 from contextlib import contextmanager
 from datetime import datetime
+from math import ceil
 
 import factory
 import pytest
@@ -10,7 +11,7 @@ from testcontainers.postgres import PostgresContainer
 
 from backend.app import app
 from backend.database import get_session
-from backend.models import ShoppingList, User, table_registry
+from backend.models import Brand, Product, ShoppingList, User, table_registry
 from backend.security import get_password_hash
 
 
@@ -81,7 +82,7 @@ def user(session):
 
 
 @pytest.fixture
-def shopping_list(session):
+def shopping_list(session, user):
     shopping_list = ShoppingListFactory()
     session.add(shopping_list)
     session.commit()
@@ -91,18 +92,60 @@ def shopping_list(session):
 
 
 @pytest.fixture
-def other_user(session):
+def product(session, user, shopping_list):
+    product = ProductFactory(
+        quantity=2,
+        best_price=10.79,
+        best_offer=11.79 / 3,
+    )
+    product.brands = [
+        BrandFactory(
+            product_id=product.id,
+            quantity=2,
+            price=10.79,
+            name='garrafa 2L',
+            unity_cost=10.79 / 2,
+            predicted_cost=ceil(2 / 2) * 10.79,
+        ),
+        BrandFactory(
+            product_id=product.id,
+            quantity=3,
+            price=11.79,
+            name='garrafa 3L',
+            unity_cost=11.79 / 3,
+            predicted_cost=ceil(2 / 3) * 11.79,
+        ),
+    ]
+    session.add(product)
+    session.commit()
+    session.refresh(product)
+
+    return product
+
+
+@pytest.fixture
+def brand(session, user, shopping_list, product):
+    brand = BrandFactory()
+    session.add(brand)
+    session.commit()
+    session.refresh(brand)
+
+    return brand
+
+
+@pytest.fixture
+def other_user(session, user):
     password = 'testtest'
-    user = UserFactory(
+    other_user = UserFactory(
         password=get_password_hash(password),
     )
-    session.add(user)
+    session.add(other_user)
     session.commit()
-    session.refresh(user)
+    session.refresh(other_user)
 
-    user.clean_password = password
+    other_user.clean_password = password
 
-    return user
+    return other_user
 
 
 @pytest.fixture
@@ -110,6 +153,18 @@ def token(client, user):
     response = client.post(
         '/auth/token',
         data={'username': user.email, 'password': user.clean_password},
+    )
+    return response.json()['access_token']
+
+
+@pytest.fixture
+def other_user_token(client, other_user):
+    response = client.post(
+        '/auth/token',
+        data={
+            'username': other_user.email,
+            'password': other_user.clean_password,
+        },
     )
     return response.json()['access_token']
 
@@ -127,5 +182,26 @@ class ShoppingListFactory(factory.Factory):
     class Meta:
         model = ShoppingList
 
-    name = factory.Faker('text')
+    name = factory.Sequence(lambda n: f'list{n}')
     user_id = 1
+
+
+class ProductFactory(factory.Factory):
+    class Meta:
+        model = Product
+
+    name = factory.Sequence(lambda n: f'product{n}')
+    list_id = 1
+    quantity = 1
+
+
+class BrandFactory(factory.Factory):
+    class Meta:
+        model = Brand
+
+    name = factory.Sequence(lambda n: f'brand{n}')
+    product_id = 1
+    quantity = 1.0
+    price = 10.0
+    unity_cost = 10.0
+    predicted_cost = 20.0
