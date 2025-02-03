@@ -56,17 +56,23 @@ def create_brand(
         * brand.price,
     )
 
-    if (
-        db_product.best_offer is None
-        or db_product.best_offer > db_brand.unity_cost
-    ):
-        db_product.best_offer = db_brand.unity_cost
+    db_product.best_offer = (
+        db_brand.unity_cost
+        if (
+            db_product.best_offer is None
+            or db_product.best_offer > db_brand.unity_cost
+        )
+        else db_product.best_offer
+    )
 
-    if (
-        db_product.best_price is None
-        or db_product.best_price > db_brand.predicted_cost
-    ):
-        db_product.best_price = db_brand.predicted_cost
+    db_product.best_price = (
+        db_brand.predicted_cost
+        if (
+            db_product.best_price is None
+            or db_product.best_price > db_brand.predicted_cost
+        )
+        else db_product.best_price
+    )
 
     session.add(db_brand)
     session.commit()
@@ -75,7 +81,7 @@ def create_brand(
     return db_brand
 
 
-@router.patch('/{brand_id}', response_model=BrandPublic)
+@router.put('/{brand_id}', response_model=BrandPublic)
 def update_brand(
     brand_id: int,
     brand: UpdateBrandSchema,
@@ -98,26 +104,28 @@ def update_brand(
     for key, value in brand.model_dump(exclude_unset=True).items():
         setattr(db_brand, key, value)
 
-    db_brand.unity_cost = float(brand.price) / brand.quantity
-    db_brand.predicted_cost = (
-        ceil(float(db_brand.product.quantity) / brand.quantity) * brand.price
-    )
+    if brand.price != db_brand.price or brand.quantity != db_brand.quantity:
+        price = float(brand.price) if brand.price else float(db_brand.price)
+        quantity = (
+            float(brand.quantity)
+            if brand.quantity
+            else float(db_brand.quantity)
+        )
 
-    db_product = session.scalar(
-        select(Product).where(Product.id == db_brand.product_id)
-    )
+        db_brand.unity_cost = price / quantity
+        db_brand.predicted_cost = (
+            ceil(float(db_brand.product.quantity) / quantity) * price
+        )
 
-    if (
-        db_product.best_offer is None
-        or db_product.best_offer > db_brand.unity_cost
-    ):
-        db_product.best_offer = db_brand.unity_cost
+        db_product = session.scalar(
+            select(Product).where(Product.id == db_brand.product_id)
+        )
 
-    if (
-        db_product.best_price is None
-        or db_product.best_price > db_brand.predicted_cost
-    ):
-        db_product.best_price = db_brand.predicted_cost
+        db_product.best_offer = min(db_product.best_offer, db_brand.unity_cost)
+
+        db_product.best_price = min(
+            db_product.best_price, db_brand.predicted_cost
+        )
 
     session.add(db_brand)
     session.commit()
