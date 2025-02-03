@@ -12,5 +12,5 @@ app.include_router(brands.router)
 
 
 @app.get('/', response_model=str)
-def default():
+def default():  # pragma: nocover
     return 'https://github.com/Odiiego/PyListing'
