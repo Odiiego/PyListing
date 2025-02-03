@@ -51,15 +51,12 @@ def test_update_list(client, token, shopping_list):
     assert response.json()['name'] == 'test'
 
 
-def test_update_list_without_permission(client, session, token, other_user):
-    shopping_list = ShoppingListFactory(user_id=other_user.id)
-
-    session.add(shopping_list)
-    session.commit()
-
+def test_update_list_without_permission(
+    client, shopping_list, other_user_token
+):
     response = client.put(
         f'/lists/{shopping_list.id}',
-        headers={'Authorization': f'Bearer {token}'},
+        headers={'Authorization': f'Bearer {other_user_token}'},
         json={
             'name': 'test',
         },
@@ -69,7 +66,7 @@ def test_update_list_without_permission(client, session, token, other_user):
     assert response.json() == {'detail': 'Shopping list not found'}
 
 
-def test_delete_list(client, user, shopping_list, token):
+def test_delete_list(client, shopping_list, token):
     response = client.delete(
         f'/lists/{shopping_list.id}',
         headers={'Authorization': f'Bearer {token}'},
@@ -81,15 +78,12 @@ def test_delete_list(client, user, shopping_list, token):
     }
 
 
-def test_delete_list_without_permission(client, session, token, other_user):
-    shopping_list = ShoppingListFactory(user_id=other_user.id)
-
-    session.add(shopping_list)
-    session.commit()
-
+def test_delete_list_without_permission(
+    client, shopping_list, other_user_token
+):
     response = client.delete(
         f'/lists/{shopping_list.id}',
-        headers={'Authorization': f'Bearer {token}'},
+        headers={'Authorization': f'Bearer {other_user_token}'},
     )
 
     assert response.status_code == HTTPStatus.NOT_FOUND
@@ -147,9 +141,9 @@ def test_get_lists_by_id(mock_db_time, session, client, token, user):
     }
 
 
-def test_get_lists_with_invalid_id(client, token, user):
+def test_get_lists_with_invalid_id(client, token):
     response = client.get(
-        '/lists/1', headers={'Authorization': f'Bearer {token}'}
+        f'/lists/{9999}', headers={'Authorization': f'Bearer {token}'}
     )
 
     assert response.status_code == HTTPStatus.NOT_FOUND
