@@ -57,7 +57,7 @@ def create_product(
     return db_product
 
 
-@router.patch('/{product_id}', response_model=ProductPublic)
+@router.put('/{product_id}', response_model=ProductPublic)
 def update_product(
     product_id: int,
     product: UpdateProductSchema,
@@ -89,16 +89,13 @@ def update_product(
                 ceil(product.quantity / brand.quantity) * brand.price
             )
 
-            if (
-                db_product.best_offer is None
-                or db_product.best_offer > brand.unity_cost
-            ):
-                db_product.best_offer = brand.unity_cost
-            if (
-                db_product.best_price is None
-                or db_product.best_price > brand.predicted_cost
-            ):
-                db_product.best_price = brand.predicted_cost
+            db_product.best_offer = min(
+                db_product.best_offer, brand.unity_cost
+            )
+
+            db_product.best_price = min(
+                db_product.best_price, brand.predicted_cost
+            )
 
     session.add(db_product)
     session.commit()
