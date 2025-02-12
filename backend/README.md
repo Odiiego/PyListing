@@ -12,13 +12,20 @@ PyListing é um aplicativo desenvolvido com FastAPI que facilita a gestão de li
 ## Tecnologias 🚀
 
 **Back-end:**
-
 - Python
 - FastAPI
-- Pydantic
 - SQLAlchemy
-- Pytest
+- Pydantic
+- Alembic
+- Ruff
 
 **Banco de Dados:**
-
 - PostgreSQL
+
+**Testes:** 🧪
+- Pytest
+- Pytest-cov
+- Taskipy
+- Factory Boy
+- Testcontainers
+- Freezegun
