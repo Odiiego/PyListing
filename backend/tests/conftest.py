@@ -152,7 +152,7 @@ def other_user(session, user):
 def token(client, user):
     response = client.post(
         '/auth/token',
-        data={'username': user.email, 'password': user.clean_password},
+        data={'username': user.username, 'password': user.clean_password},
     )
     return response.json()['access_token']
 
@@ -162,7 +162,7 @@ def other_user_token(client, other_user):
     response = client.post(
         '/auth/token',
         data={
-            'username': other_user.email,
+            'username': other_user.username,
             'password': other_user.clean_password,
         },
     )

@@ -6,7 +6,7 @@ from freezegun import freeze_time
 def test_get_token(client, user):
     response = client.post(
         '/auth/token',
-        data={'username': user.email, 'password': user.clean_password},
+        data={'username': user.username, 'password': user.clean_password},
     )
     token = response.json()
 
@@ -19,7 +19,7 @@ def test_token_with_expired_credentials(client, user):
     with freeze_time('2023-07-14 12:00:00'):
         response = client.post(
             '/auth/token',
-            data={'username': user.email, 'password': user.clean_password},
+            data={'username': user.username, 'password': user.clean_password},
         )
         assert response.status_code == HTTPStatus.OK
         token = response.json()['access_token']
@@ -41,7 +41,7 @@ def test_token_with_expired_credentials(client, user):
 def test_get_token_with_wrong_password(client, user):
     response = client.post(
         '/auth/token',
-        data={'username': user.email, 'password': 'wrong_password'},
+        data={'username': user.username, 'password': 'wrong_password'},
     )
 
     assert response.status_code == HTTPStatus.BAD_REQUEST
@@ -51,7 +51,7 @@ def test_get_token_with_wrong_email(client, user):
     response = client.post(
         '/auth/token',
         data={
-            'username': 'wrongwrong@wrong.com',
+            'username': 'wrongUsername',
             'password': user.clean_password,
         },
     )
@@ -77,7 +77,7 @@ def test_refresh_token_with_expired_credentials(client, user):
     with freeze_time('2023-07-14 12:00:00'):
         response = client.post(
             '/auth/token',
-            data={'username': user.email, 'password': user.clean_password},
+            data={'username': user.username, 'password': user.clean_password},
         )
         assert response.status_code == HTTPStatus.OK
         token = response.json()['access_token']
