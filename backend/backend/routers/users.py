@@ -8,8 +8,18 @@ from sqlalchemy.orm import Session
 
 from backend.database import get_session
 from backend.models import User
-from backend.schemas import Message, UpdateUserSchema, UserPublic, UserSchema
-from backend.security import get_current_user, get_password_hash
+from backend.schemas import (
+    Message,
+    Token,
+    UpdateUserSchema,
+    UserPublic,
+    UserSchema,
+)
+from backend.security import (
+    create_access_token,
+    get_current_user,
+    get_password_hash,
+)
 
 router = APIRouter(prefix='/users', tags=['users'])
 
@@ -17,7 +27,7 @@ T_Session = Annotated[Session, Depends(get_session)]
 T_CurrentUser = Annotated[User, Depends(get_current_user)]
 
 
-@router.post('/', status_code=HTTPStatus.CREATED, response_model=UserPublic)
+@router.post('/', status_code=HTTPStatus.CREATED, response_model=Token)
 def create_user(user: UserSchema, session: T_Session):
     db_user = session.scalar(
         select(User).where(
@@ -49,7 +59,9 @@ def create_user(user: UserSchema, session: T_Session):
     session.commit()
     session.refresh(db_user)
 
-    return db_user
+    access_token = create_access_token(data={'sub': db_user.username})
+
+    return {'access_token': access_token, 'token_type': 'bearer'}
 
 
 @router.put('/{user_id}', response_model=UserPublic)
