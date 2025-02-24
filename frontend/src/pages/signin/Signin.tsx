@@ -1,7 +1,7 @@
-import { SignInView } from './signin.view';
+import SignInView from './signin.view';
 import { useSignInModel } from './signin.model';
 
-export default function Signin() {
+export default function SignIn() {
   const methods = useSignInModel();
 
   return <SignInView {...methods} />;

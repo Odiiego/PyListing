@@ -2,7 +2,7 @@ import { useSignInModel } from './signin.model';
 
 type SignInViewProps = ReturnType<typeof useSignInModel>;
 
-export const SignInView = (props: SignInViewProps) => {
+export default function SignInView(props: SignInViewProps) {
   const { register, handleSubmit, onSubmit, errors, isSubmitting } = props;
 
   return (
@@ -51,4 +51,4 @@ export const SignInView = (props: SignInViewProps) => {
       </form>
     </div>
   );
-};
+}
