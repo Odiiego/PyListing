@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { login } from '../../services/authService';
 
 export const useSignInModel = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ export const useSignInModel = () => {
       return response.data;
     },
     onSuccess: (data) => {
-      localStorage.setItem('token', JSON.stringify(data));
+      login(data);
 
       navigate('/');
     },

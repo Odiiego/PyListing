@@ -5,6 +5,7 @@ import { signUpSchema } from './signup.schema';
 import { SignUpSchemaType } from './signup.type';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { login } from '../../services/authService';
 
 export const useSignUpModel = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export const useSignUpModel = () => {
       return response.data;
     },
     onSuccess: (data) => {
-      localStorage.setItem('token', JSON.stringify(data));
+      login(data);
 
       navigate('/');
     },
