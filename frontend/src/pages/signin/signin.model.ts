@@ -1,11 +1,11 @@
 import { useForm } from 'react-hook-form';
-import { signInSchemaType } from './signin.type';
+import { ISignInSchemaType } from './signin.type';
 import { signInSchema } from './signin.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { login } from '../../services/authService';
+import { login } from '../../services/auth/authService';
 
 export const useSignInModel = () => {
   const navigate = useNavigate();
@@ -13,12 +13,12 @@ export const useSignInModel = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<signInSchemaType>({
+  } = useForm<ISignInSchemaType>({
     resolver: zodResolver(signInSchema),
   });
 
   const mutation = useMutation({
-    mutationFn: async (data: signInSchemaType) => {
+    mutationFn: async (data: ISignInSchemaType) => {
       const formData = new URLSearchParams({
         username: data.username,
         password: data.password,
@@ -44,7 +44,7 @@ export const useSignInModel = () => {
     },
   });
 
-  const onSubmit = (data: signInSchemaType) => {
+  const onSubmit = (data: ISignInSchemaType) => {
     mutation.mutate(data);
   };
 

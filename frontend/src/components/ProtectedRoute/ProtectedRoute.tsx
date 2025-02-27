@@ -1,5 +1,5 @@
 import { RouteProps } from 'react-router-dom';
-import { useProtectedRouteModel } from './ProtectedRoute.model';
+import { useProtectedRouteModel } from './protectedRoute.model';
 import ProtectedRouteView from './protectedRoute.view';
 
 type ProtectedRouteProps = {

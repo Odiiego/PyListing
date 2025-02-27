@@ -2,10 +2,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { signUpSchema } from './signup.schema';
-import { SignUpSchemaType } from './signup.type';
+import { ISignUpSchemaType } from './signup.type';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import { login } from '../../services/authService';
+import { login } from '../../services/auth/authService';
 
 export const useSignUpModel = () => {
   const navigate = useNavigate();
@@ -13,12 +13,12 @@ export const useSignUpModel = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<SignUpSchemaType>({
+  } = useForm<ISignUpSchemaType>({
     resolver: zodResolver(signUpSchema),
   });
 
   const mutation = useMutation({
-    mutationFn: async (data: SignUpSchemaType) => {
+    mutationFn: async (data: ISignUpSchemaType) => {
       const response = await axios.post('http://localhost:8000/users/', data);
       return response.data;
     },
@@ -32,7 +32,7 @@ export const useSignUpModel = () => {
     },
   });
 
-  const onSubmit = (data: SignUpSchemaType) => {
+  const onSubmit = (data: ISignUpSchemaType) => {
     mutation.mutate(data);
   };
 

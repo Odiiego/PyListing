@@ -1,4 +1,4 @@
-import { useProtectedRouteModel } from './ProtectedRoute.model';
+import { useProtectedRouteModel } from './protectedRoute.model';
 import { RouteProps, Navigate } from 'react-router-dom';
 
 import React from 'react';

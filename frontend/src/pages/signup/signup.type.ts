@@ -1,15 +1,15 @@
 import { z } from 'zod';
 import { signUpSchema } from './signup.schema';
 
-export interface SignUpRequest {
+export interface ISignUpRequest {
   email: string;
   password: string;
   username: string;
 }
 
-export interface SignUpResponse {
+export interface ISignUpResponse {
   access_token: string;
   token_type: string;
 }
 
-export type SignUpSchemaType = z.infer<typeof signUpSchema>;
+export type ISignUpSchemaType = z.infer<typeof signUpSchema>;

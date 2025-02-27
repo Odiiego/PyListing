@@ -1,14 +1,14 @@
 import { z } from 'zod';
 import { signInSchema } from './signin.schema';
 
-export interface SignInRequest {
+export interface ISignInRequest {
   password: string;
   username: string;
 }
 
-export interface SignInResponse {
+export interface ISignInResponse {
   access_token: string;
   token_type: string;
 }
 
-export type signInSchemaType = z.infer<typeof signInSchema>;
+export type ISignInSchemaType = z.infer<typeof signInSchema>;
