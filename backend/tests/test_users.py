@@ -1,7 +1,5 @@
 from http import HTTPStatus
 
-from backend.security import create_access_token
-
 
 def test_create_user(client):
     response = client.post(
@@ -13,10 +11,8 @@ def test_create_user(client):
         },
     )
 
-    token = create_access_token(data={'sub': 'test'})
-
     assert response.status_code == HTTPStatus.CREATED
-    assert response.json()['access_token'] == token
+    assert 'access_token' in response.json()
 
 
 def test_create_user_username_already_exists(client, user):

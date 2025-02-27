@@ -6,7 +6,7 @@ from backend.security import create_access_token, settings
 
 
 def test_create_jwt():
-    data = {'test': 'test'}
+    data = {'test': 'test', 'id': 'test'}
     token = create_access_token(data)
 
     decoded = decode(
@@ -39,7 +39,18 @@ def test_jwt_without_credentials(client, user):
 
 
 def test_create_jwt_with_invalid_email(client, user):
-    token = create_access_token({'sub': 'invalid-email'})
+    token = create_access_token({'sub': 'invalid-email', 'id': user.id})
+    response = client.delete(
+        '/users/1',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
+    assert response.json() == {'detail': 'Could not validate credentials'}
+
+
+def test_create_jwt_with_invalid_id(client, user):
+    token = create_access_token({'sub': user.username, 'id': None})
     response = client.delete(
         '/users/1',
         headers={'Authorization': f'Bearer {token}'},
