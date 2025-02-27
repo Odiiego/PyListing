@@ -59,7 +59,9 @@ def create_user(user: UserSchema, session: T_Session):
     session.commit()
     session.refresh(db_user)
 
-    access_token = create_access_token(data={'sub': db_user.username})
+    access_token = create_access_token(
+        data={'sub': db_user.username, 'id': db_user.id}
+    )
 
     return {'access_token': access_token, 'token_type': 'bearer'}
 

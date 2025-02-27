@@ -39,7 +39,9 @@ def login_for_access_token(form_data: OAutg2Form, session: T_Session):
             detail='Incorrect email or password',
         )
 
-    access_token = create_access_token(data={'sub': user.username})
+    access_token = create_access_token(
+        data={'sub': user.username, 'id': user.id}
+    )
 
     return {'access_token': access_token, 'token_type': 'bearer'}
 
@@ -48,6 +50,8 @@ def login_for_access_token(form_data: OAutg2Form, session: T_Session):
 def refresh_access_token(
     user: User = Depends(get_current_user),
 ):
-    new_access_token = create_access_token(data={'sub': user.username})
+    new_access_token = create_access_token(
+        data={'sub': user.username, 'id': user.id}
+    )
 
     return {'access_token': new_access_token, 'token_type': 'bearer'}

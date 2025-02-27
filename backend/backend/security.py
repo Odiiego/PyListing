@@ -56,7 +56,10 @@ def get_current_user(
         username: str = payload.get('sub')
         if username is None:
             raise credentials_exception
-        token_data = TokenData(username=username)
+        user_id: str = payload.get('id')
+        if user_id is None:
+            raise credentials_exception
+        token_data = TokenData(username=username, user_id=user_id)
     except DecodeError:
         raise credentials_exception
     except ExpiredSignatureError:
