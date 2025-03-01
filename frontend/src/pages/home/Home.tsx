@@ -3,7 +3,7 @@ import GuestSectionView from './guestSection.view';
 import { useHomeModel } from './home.model';
 
 export default function Home() {
-  const { isLoggedIn } = useHomeModel();
+  const { isLoggedIn, ...rest } = useHomeModel();
 
   return (
     <div>
@@ -12,7 +12,7 @@ export default function Home() {
         <br />
         <a href="/auth/signup">Sign Up</a>
       </header>
-      <>{isLoggedIn ? <UserSectionView /> : <GuestSectionView />}</>
+      <>{isLoggedIn ? <UserSectionView {...rest} /> : <GuestSectionView />}</>
     </div>
   );
 }
