@@ -9,15 +9,22 @@ import { ICreateListSchemaType } from './home.type';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createListSchema } from './home.schemas';
 import { useMutation } from '@tanstack/react-query';
-import { token } from '../../services/auth/authService.type';
-import { createListService } from '../../services/lists/listServices';
+import { IToken } from '../../services/auth/authService.type';
+import {
+  createListService,
+  getListsService,
+} from '../../services/lists/listServices';
+import { IShoppingList } from '../../services/lists/listServices.type';
 
 export function useHomeModel() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(isTokenValid());
   const [userId, setUserId] = React.useState<undefined | number>(undefined);
-  const [userToken, setUserToken] = React.useState<undefined | token>(
+  const [userToken, setUserToken] = React.useState<undefined | IToken>(
     undefined,
   );
+  const [userShoppingLists, setUserShoppingLists] = React.useState<
+    [] | IShoppingList[]
+  >([]);
 
   const {
     register,
@@ -33,6 +40,20 @@ export function useHomeModel() {
     setUserId(getUserId());
     setUserToken(getUserToken());
   }, []);
+
+  React.useEffect(() => {
+    const fetchLists = async () => {
+      if (userToken) {
+        try {
+          const lists = await getListsService(userToken);
+          setUserShoppingLists(lists);
+        } catch (error) {
+          console.error('Erro ao buscar listas:', error);
+        }
+      }
+    };
+    fetchLists();
+  }, [userToken]);
 
   const mutation = useMutation({
     mutationFn: async ({ data }: { data: ICreateListSchemaType }) =>
@@ -51,6 +72,7 @@ export function useHomeModel() {
 
   return {
     isLoggedIn,
+    userShoppingLists,
     register,
     handleSubmit,
     onSubmit,
