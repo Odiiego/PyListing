@@ -1,7 +1,7 @@
 import { jwtDecode } from 'jwt-decode';
-import { decodedToken, token } from './authService.type';
+import { IDecodedToken, IToken } from './authService.type';
 
-export const login = (token: token) => {
+export const login = (token: IToken) => {
   localStorage.setItem('token', JSON.stringify(token));
 };
 
@@ -33,7 +33,7 @@ export const getUserId = () => {
   const token = localStorage.getItem('token');
   if (token && isTokenValid()) {
     try {
-      const decoded: decodedToken = jwtDecode(token);
+      const decoded: IDecodedToken = jwtDecode(token);
       if (!decoded.id) throw new Error('Invalid id');
 
       return decoded.id;
@@ -45,7 +45,7 @@ export const getUserId = () => {
   return undefined;
 };
 
-export const getUserToken = (): token | undefined => {
+export const getUserToken = (): IToken | undefined => {
   const token = localStorage.getItem('token');
   if (token && isTokenValid()) {
     return JSON.parse(token);

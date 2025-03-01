@@ -1,9 +1,9 @@
-export interface token {
+export interface IToken {
   access_token: string;
   token_type: string;
 }
 
-export interface decodedToken {
+export interface IDecodedToken {
   exp: string;
   id: number;
   sub: number;
