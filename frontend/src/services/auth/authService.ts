@@ -1,9 +1,5 @@
 import { jwtDecode } from 'jwt-decode';
-
-type token = {
-  access_token: string;
-  token_type: string;
-};
+import { decodedToken, token } from './authService.type';
 
 export const login = (token: token) => {
   localStorage.setItem('token', JSON.stringify(token));
@@ -31,4 +27,28 @@ export const isTokenValid = () => {
     }
   }
   return false;
+};
+
+export const getUserId = () => {
+  const token = localStorage.getItem('token');
+  if (token && isTokenValid()) {
+    try {
+      const decoded: decodedToken = jwtDecode(token);
+      if (!decoded.id) throw new Error('Invalid id');
+
+      return decoded.id;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
+  return undefined;
+};
+
+export const getUserToken = (): token | undefined => {
+  const token = localStorage.getItem('token');
+  if (token && isTokenValid()) {
+    return JSON.parse(token);
+  }
+  return undefined;
 };
