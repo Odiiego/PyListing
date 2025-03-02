@@ -12,6 +12,7 @@ import { useMutation } from '@tanstack/react-query';
 import { IToken } from '../../services/auth/authService.type';
 import {
   createListService,
+  deleteListService,
   getListsService,
 } from '../../services/lists/listServices';
 import { IShoppingList } from '../../services/lists/listServices.type';
@@ -25,6 +26,11 @@ export function useHomeModel() {
   const [userShoppingLists, setUserShoppingLists] = React.useState<
     [] | IShoppingList[]
   >([]);
+
+  const deleteList = async (listId: number) => {
+    deleteListService(listId, userToken);
+    setUserShoppingLists((lists) => lists.filter((list) => list.id != listId));
+  };
 
   const {
     register,
@@ -58,7 +64,8 @@ export function useHomeModel() {
   const mutation = useMutation({
     mutationFn: async ({ data }: { data: ICreateListSchemaType }) =>
       createListService(data, userId, userToken),
-    onSuccess: () => {
+    onSuccess: (list) => {
+      setUserShoppingLists((lists) => [...lists, list]);
       reset();
     },
     onError: (error) => {
@@ -71,6 +78,7 @@ export function useHomeModel() {
   };
 
   return {
+    deleteList,
     isLoggedIn,
     userShoppingLists,
     register,

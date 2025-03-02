@@ -5,6 +5,7 @@ type UserSectionViewProps = Omit<ReturnType<typeof useHomeModel>, 'isLoggedIn'>;
 
 export default function UserSectionView(props: UserSectionViewProps) {
   const {
+    deleteList,
     userShoppingLists,
     register,
     handleSubmit,
@@ -61,7 +62,10 @@ export default function UserSectionView(props: UserSectionViewProps) {
                 >
                   {list.name}
                 </Link>
-                <button className="text-red-500 cursor-pointer hover:text-red-700">
+                <button
+                  onClick={async () => await deleteList(list.id)}
+                  className="text-red-500 cursor-pointer hover:text-red-700"
+                >
                   Excluir
                 </button>
               </li>
