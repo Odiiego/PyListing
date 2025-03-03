@@ -1,6 +1,7 @@
 import UserSectionView from './userSection.view';
 import GuestSectionView from './guestSection.view';
 import { useHomeModel } from './home.model';
+import { logout } from '../../services/auth/authService';
 
 export default function Home() {
   const { isLoggedIn, ...rest } = useHomeModel();
@@ -8,9 +9,17 @@ export default function Home() {
   return (
     <div>
       <header>
-        <a href="/auth/signin">Sign In</a>
-        <br />
-        <a href="/auth/signup">Sign Up</a>
+        <>
+          {isLoggedIn ? (
+            <a onClick={logout} href="/">
+              logout
+            </a>
+          ) : (
+            <a className="m-4" href="/auth/signin">
+              Sign In
+            </a>
+          )}
+        </>
       </header>
       <>{isLoggedIn ? <UserSectionView {...rest} /> : <GuestSectionView />}</>
     </div>

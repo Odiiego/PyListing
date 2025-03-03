@@ -12,7 +12,6 @@ export default function SignInView(props: SignInViewProps) {
         className="bg-white p-6 rounded-lg shadow-md w-96"
       >
         <h2 className="text-2xl font-semibold text-center mb-4">Login</h2>
-
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
             Nome de Usuário
@@ -26,7 +25,6 @@ export default function SignInView(props: SignInViewProps) {
             <p className="text-red-500 text-xs">{errors.username.message}</p>
           )}
         </div>
-
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
             Senha
@@ -40,7 +38,6 @@ export default function SignInView(props: SignInViewProps) {
             <p className="text-red-500 text-xs">{errors.password.message}</p>
           )}
         </div>
-
         <button
           type="submit"
           className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
@@ -48,6 +45,12 @@ export default function SignInView(props: SignInViewProps) {
         >
           {isSubmitting ? 'Entrando...' : 'Entrar'}
         </button>
+        <p className="mt-4 text-center">
+          Ainda não é cadastrado?
+          <a className="ml-1 text-blue-500" href="/auth/signup">
+            Cadastre-se
+          </a>
+        </p>
       </form>
     </div>
   );

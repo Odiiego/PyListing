@@ -1,3 +1,3 @@
 export default function GuestSectionView() {
-  return <div>Guest</div>;
+  return <div>Home Page para visitantes! xD</div>;
 }
