@@ -48,3 +48,17 @@ export const deleteListService = async (
 
   return response.data;
 };
+
+export const getListService = async (
+  listId: number,
+  userToken: undefined | IToken,
+): Promise<IShoppingList> => {
+  const response = await axios.get(`http://localhost:8000/lists/${listId}`, {
+    headers: {
+      Authorization: `Bearer ${userToken?.access_token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  return response.data;
+};
