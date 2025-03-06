@@ -3,8 +3,15 @@ import { useListModel } from './list.model';
 type ListViewProps = ReturnType<typeof useListModel>;
 
 export default function ListView(props: ListViewProps) {
-  const { list, errors, register, handleSubmit, onSubmit, isSubmitting } =
-    props;
+  const {
+    list,
+    productList,
+    errors,
+    register,
+    handleSubmit,
+    onSubmit,
+    isSubmitting,
+  } = props;
 
   if (!list) <p>carregando...</p>;
   else {
@@ -59,9 +66,9 @@ export default function ListView(props: ListViewProps) {
             </button>
           </form>
 
-          {list.products.length ? (
+          {productList.length ? (
             <ul className="space-y-2">
-              {list.products.map((product) => (
+              {productList.map((product) => (
                 <li
                   key={product.id}
                   className="p-2 border rounded text-gray-700"

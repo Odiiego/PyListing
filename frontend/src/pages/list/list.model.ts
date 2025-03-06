@@ -9,9 +9,11 @@ import { ICreateProductSchemaType } from './list.type';
 import { createProductSchema } from './list.schema';
 import { useMutation } from '@tanstack/react-query';
 import { createProductService } from '../../services/products/productServices';
+import { IProduct } from '../../services/products/productServices.type';
 
 export const useListModel = () => {
   const [list, setList] = React.useState<undefined | IShoppingList>();
+  const [productList, setProductList] = React.useState<[] | IProduct[]>([]);
   const { id } = useParams();
   const {
     register,
@@ -27,6 +29,7 @@ export const useListModel = () => {
       try {
         const list = await getListService(Number(id), getUserToken());
         setList(list);
+        setProductList(list.products);
       } catch (error) {
         console.error('Erro ao buscar listas:', error);
       }
@@ -37,8 +40,8 @@ export const useListModel = () => {
   const mutation = useMutation({
     mutationFn: async ({ data }: { data: ICreateProductSchemaType }) =>
       createProductService(data, list?.id, getUserToken()),
-    onSuccess: () => {
-      // setUserShoppingLists((lists) => [...lists, list]);
+    onSuccess: (product) => {
+      setProductList((products) => [...products, product]);
       reset();
     },
     onError: (error) => {
@@ -50,5 +53,13 @@ export const useListModel = () => {
     mutation.mutate({ data });
   };
 
-  return { list, errors, register, handleSubmit, onSubmit, isSubmitting };
+  return {
+    list,
+    productList,
+    errors,
+    register,
+    handleSubmit,
+    onSubmit,
+    isSubmitting,
+  };
 };
