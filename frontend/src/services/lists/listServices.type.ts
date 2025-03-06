@@ -1,4 +1,4 @@
-import { IProduct } from '../products/products.type';
+import { IProduct } from '../products/productServices.type';
 
 export interface IShoppingList {
   id: number;
