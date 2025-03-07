@@ -21,3 +21,20 @@ export const createProductService = async (
 
   return response.data;
 };
+
+export const deleteProductService = async (
+  productId: number,
+  userToken: undefined | IToken,
+) => {
+  const response = await axios.delete(
+    `http://localhost:8000/products/${productId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${userToken?.access_token}`,
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+
+  return response.data;
+};

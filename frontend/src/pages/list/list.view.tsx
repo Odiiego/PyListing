@@ -6,6 +6,7 @@ export default function ListView(props: ListViewProps) {
   const {
     list,
     productList,
+    deleteProduct,
     errors,
     register,
     handleSubmit,
@@ -76,6 +77,12 @@ export default function ListView(props: ListViewProps) {
                   <p>
                     <span className="m-2 mr-6">{product.quantity}</span>
                     <span>{product.name}</span>
+                    <button
+                      onClick={async () => await deleteProduct(product.id)}
+                      className="text-red-500 cursor-pointer hover:text-red-700"
+                    >
+                      Excluir
+                    </button>
                   </p>
                 </li>
               ))}
