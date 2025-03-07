@@ -79,7 +79,7 @@ export default function ListView(props: ListViewProps) {
                     <span>{product.name}</span>
                     <button
                       onClick={async () => await deleteProduct(product.id)}
-                      className="text-red-500 cursor-pointer hover:text-red-700"
+                      className="text-red-500 ml-8 cursor-pointer hover:text-red-700"
                     >
                       Excluir
                     </button>
