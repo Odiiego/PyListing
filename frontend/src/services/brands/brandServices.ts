@@ -21,3 +21,20 @@ export const createBrandService = async (
 
   return response.data;
 };
+
+export const deleteBrandService = async (
+  brandId: number,
+  userToken: undefined | IToken,
+) => {
+  const response = await axios.delete(
+    `http://localhost:8000/brands/${brandId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${userToken?.access_token}`,
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+
+  return response.data;
+};

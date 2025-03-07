@@ -1,3 +1,4 @@
+import Brand from '../brand/Brand';
 import { useProductModel } from './product.model';
 
 type ProductViewProps = ReturnType<typeof useProductModel>;
@@ -7,6 +8,7 @@ export default function ProductView(props: ProductViewProps) {
     product,
     brandList,
     deleteProduct,
+    setBrandList,
     errors,
     register,
     handleSubmit,
@@ -81,11 +83,11 @@ export default function ProductView(props: ProductViewProps) {
           {isSubmitting ? 'Adicionando...' : 'Adicionar'}
         </button>
       </form>
-      {brandList.length && (
+      {brandList.length > 0 && (
         <ul className="space-y-2">
-          {brandList.map((brand) => (
-            <p>{brand.name}</p>
-          ))}
+          {brandList.map((brand) => {
+            return <Brand brand={brand} setBrandList={setBrandList} />;
+          })}
         </ul>
       )}
     </div>

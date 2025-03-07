@@ -10,6 +10,7 @@ import { createBrandService } from '../../services/brands/brandServices';
 import { IBrand } from '../../services/brands/brandServices.type';
 
 export const useProductModel = (props: IProductProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [product, setProduct] = React.useState(props.product);
   const [brandList, setBrandList] = React.useState<[] | IBrand[]>([]);
   const {
