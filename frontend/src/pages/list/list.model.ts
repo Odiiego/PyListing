@@ -8,10 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ICreateProductSchemaType } from './list.type';
 import { createProductSchema } from './list.schema';
 import { useMutation } from '@tanstack/react-query';
-import {
-  createProductService,
-  deleteProductService,
-} from '../../services/products/productServices';
+import { createProductService } from '../../services/products/productServices';
 import { IProduct } from '../../services/products/productServices.type';
 
 export const useListModel = () => {
@@ -26,13 +23,6 @@ export const useListModel = () => {
   } = useForm<ICreateProductSchemaType>({
     resolver: zodResolver(createProductSchema),
   });
-
-  const deleteProduct = async (productId: number) => {
-    deleteProductService(productId, getUserToken());
-    setProductList((products) =>
-      products.filter((product) => product.id != productId),
-    );
-  };
 
   React.useEffect(() => {
     const fetchList = async () => {
@@ -71,6 +61,6 @@ export const useListModel = () => {
     handleSubmit,
     onSubmit,
     isSubmitting,
-    deleteProduct,
+    setProductList,
   };
 };

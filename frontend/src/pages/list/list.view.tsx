@@ -1,3 +1,4 @@
+import Product from '../../components/product/Product';
 import { useListModel } from './list.model';
 
 type ListViewProps = ReturnType<typeof useListModel>;
@@ -6,7 +7,7 @@ export default function ListView(props: ListViewProps) {
   const {
     list,
     productList,
-    deleteProduct,
+    setProductList,
     errors,
     register,
     handleSubmit,
@@ -74,16 +75,7 @@ export default function ListView(props: ListViewProps) {
                   key={product.id}
                   className="p-2 border rounded text-gray-700"
                 >
-                  <p>
-                    <span className="m-2 mr-6">{product.quantity}</span>
-                    <span>{product.name}</span>
-                    <button
-                      onClick={async () => await deleteProduct(product.id)}
-                      className="text-red-500 ml-8 cursor-pointer hover:text-red-700"
-                    >
-                      Excluir
-                    </button>
-                  </p>
+                  <Product setProductList={setProductList} product={product} />
                 </li>
               ))}
             </ul>
