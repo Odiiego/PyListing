@@ -7,7 +7,7 @@ import api from '../utils/apiUtils';
 export const createBrandService = async (
   data: ICreateBrandSchemaType,
   productId: number,
-  userToken: IToken,
+  userToken: undefined | IToken,
 ): Promise<IBrand> => {
   try {
     if (!userToken) throw new Error('Token de usuário não encontrado');

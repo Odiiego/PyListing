@@ -3,7 +3,7 @@ import { IProduct } from '../../services/products/productServices.type';
 import { createBrandSchema } from './product.schema';
 
 export interface IProductProps {
-  setProductList: React.Dispatch<React.SetStateAction<[] | IProduct[]>>;
+  setProductList: React.Dispatch<React.SetStateAction<IProduct[]>>;
   product: IProduct;
 }
 

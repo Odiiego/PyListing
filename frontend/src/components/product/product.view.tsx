@@ -54,8 +54,8 @@ export default function ProductView(props: ProductViewProps) {
               className="w-full p-2 border rounded"
               placeholder="R$ xx"
             />
-            {errors.quantity && (
-              <p className="text-red-500 text-xs">{errors.quantity.message}</p>
+            {errors.price && (
+              <p className="text-red-500 text-xs">{errors.price.message}</p>
             )}
           </div>
 
@@ -86,7 +86,9 @@ export default function ProductView(props: ProductViewProps) {
       {brandList.length > 0 && (
         <ul className="space-y-2">
           {brandList.map((brand) => {
-            return <Brand brand={brand} setBrandList={setBrandList} />;
+            return (
+              <Brand key={brand.id} brand={brand} setBrandList={setBrandList} />
+            );
           })}
         </ul>
       )}

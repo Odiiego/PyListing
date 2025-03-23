@@ -12,7 +12,7 @@ import { IBrand } from '../../services/brands/brandServices.type';
 export const useProductModel = (props: IProductProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [product, setProduct] = React.useState(props.product);
-  const [brandList, setBrandList] = React.useState<[] | IBrand[]>([]);
+  const [brandList, setBrandList] = React.useState<IBrand[]>([]);
   const {
     register,
     handleSubmit,
@@ -27,10 +27,14 @@ export const useProductModel = (props: IProductProps) => {
   }, [product.brands]);
 
   const deleteProduct = async (productId: number) => {
-    deleteProductService(productId, getUserToken());
-    props.setProductList((products) =>
-      products.filter((product) => product.id != productId),
-    );
+    try {
+      await deleteProductService(productId, getUserToken());
+      props.setProductList((products) =>
+        products.filter((product) => product.id !== productId),
+      );
+    } catch (error) {
+      console.error('Erro ao excluir o produto:', error);
+    }
   };
 
   const mutation = useMutation({
