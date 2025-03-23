@@ -8,10 +8,14 @@ export const useBrandModel = (props: IBrandProps) => {
   const [brand, setBrand] = React.useState(props.brand);
 
   const deleteBrand = async (brandId: number) => {
-    deleteBrandService(brandId, getUserToken());
-    props.setBrandList((brands) =>
-      brands.filter((brand) => brand.id != brandId),
-    );
+    try {
+      await deleteBrandService(brandId, getUserToken());
+      props.setBrandList((brands) =>
+        brands.filter((brand) => brand.id !== brandId),
+      );
+    } catch (error) {
+      console.error('Erro ao excluir a marca:', error);
+    }
   };
 
   return { brand, deleteBrand };

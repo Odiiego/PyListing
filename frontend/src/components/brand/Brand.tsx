@@ -3,7 +3,7 @@ import { IBrandProps } from './brand.types';
 import BrandView from './brand.view';
 
 export default function Brand(props: IBrandProps) {
-  const methods = useBrandModel(props);
+  const brandModel = useBrandModel(props);
 
-  return <BrandView {...methods} />;
+  return <BrandView {...brandModel} />;
 }

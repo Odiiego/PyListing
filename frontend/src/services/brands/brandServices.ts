@@ -1,40 +1,43 @@
-import axios from 'axios';
 import { ICreateBrandSchemaType } from '../../components/product/product.type';
 import { IToken } from '../auth/authService.type';
 import { IBrand } from './brandServices.type';
+import { getAuthHeaders } from '../auth/authService';
+import api from '../utils/apiUtils';
 
 export const createBrandService = async (
   data: ICreateBrandSchemaType,
-  productId: undefined | number,
-  userToken: undefined | IToken,
+  productId: number,
+  userToken: IToken,
 ): Promise<IBrand> => {
-  const response = await axios.post(
-    `http://localhost:8000/brands/${productId}`,
-    data,
-    {
-      headers: {
-        Authorization: `Bearer ${userToken?.access_token}`,
-        'Content-Type': 'application/json',
-      },
-    },
-  );
+  try {
+    if (!userToken) throw new Error('Token de usuário não encontrado');
+    if (!productId) throw new Error('ID do produto não pode ser indefinido');
 
-  return response.data;
+    const response = await api.post(`/brands/${productId}`, data, {
+      headers: getAuthHeaders(userToken),
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar a marca:', error);
+    throw new Error(error instanceof Error ? error.message : 'Erro inesperado');
+  }
 };
 
 export const deleteBrandService = async (
   brandId: number,
   userToken: undefined | IToken,
 ) => {
-  const response = await axios.delete(
-    `http://localhost:8000/brands/${brandId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${userToken?.access_token}`,
-        'Content-Type': 'application/json',
-      },
-    },
-  );
+  try {
+    if (!userToken) throw new Error('Token de usuário não encontrado');
 
-  return response.data;
+    const response = await api.delete(`/brands/${brandId}`, {
+      headers: getAuthHeaders(userToken),
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao excluir a marca:', error);
+    throw new Error(error instanceof Error ? error.message : 'Erro inesperado');
+  }
 };

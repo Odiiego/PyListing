@@ -4,6 +4,14 @@ type BrandViewProps = ReturnType<typeof useBrandModel>;
 
 export default function BrandView(props: BrandViewProps) {
   const { brand, deleteBrand } = props;
+  const handleDelete = async () => {
+    try {
+      await deleteBrand(brand.id);
+    } catch (error) {
+      console.error('Erro ao excluir marca:', error);
+    }
+  };
+
   return (
     <div>
       <p>
@@ -13,8 +21,9 @@ export default function BrandView(props: BrandViewProps) {
         <span className="m-2">{brand.predicted_cost}</span>
         <span className="m-2">{brand.unity_cost}</span>
         <button
-          onClick={async () => await deleteBrand(brand.id)}
+          onClick={handleDelete}
           className="text-red-500 ml-8 cursor-pointer hover:text-red-700"
+          aria-label={`Excluir marca ${brand.name}`}
         >
           Excluir
         </button>
