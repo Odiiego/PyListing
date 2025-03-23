@@ -52,3 +52,11 @@ export const getUserToken = (): IToken | undefined => {
   }
   return undefined;
 };
+
+export const getAuthHeaders = (userToken: IToken | undefined) => {
+  if (!userToken) throw new Error('Token de usuário não encontrado');
+  return {
+    Authorization: `Bearer ${userToken.access_token}`,
+    'Content-Type': 'application/json',
+  };
+};
