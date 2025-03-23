@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { login } from '../../services/auth/authService';
+import { login } from '../../services/auth/authServices';
 
 export const useSignInModel = () => {
   const navigate = useNavigate();

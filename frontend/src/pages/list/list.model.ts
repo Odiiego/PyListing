@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { getListService } from '../../services/lists/listServices';
-import { getUserToken } from '../../services/auth/authService';
+import { getUserToken } from '../../services/auth/authServices';
 import React from 'react';
 import { IShoppingList } from '../../services/lists/listServices.type';
 import { useForm } from 'react-hook-form';

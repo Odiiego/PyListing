@@ -1,5 +1,5 @@
 import React from 'react';
-import { getUserToken } from '../../services/auth/authService';
+import { getUserToken } from '../../services/auth/authServices';
 import { deleteProductService } from '../../services/products/productServices';
 import { ICreateBrandSchemaType, IProductProps } from './product.type';
 import { useMutation } from '@tanstack/react-query';
@@ -41,7 +41,6 @@ export const useProductModel = (props: IProductProps) => {
     mutationFn: async ({ data }: { data: ICreateBrandSchemaType }) =>
       createBrandService(data, product?.id, getUserToken()),
     onSuccess: (brand) => {
-      console.log(brand);
       setBrandList((brands) => [...brands, brand]);
       reset();
     },

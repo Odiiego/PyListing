@@ -1,3 +1,3 @@
-import { isTokenValid } from '../../services/auth/authService';
+import { isTokenValid } from '../../services/auth/authServices';
 
 export const useProtectedRouteModel = () => isTokenValid();

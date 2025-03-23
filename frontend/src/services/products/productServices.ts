@@ -1,8 +1,8 @@
 import { ICreateProductSchemaType } from '../../pages/list/list.type';
 import { IProduct } from './productServices.type';
-import { IToken } from '../auth/authService.type';
+import { IToken } from '../auth/authServices.type';
 import api from '../utils/apiUtils';
-import { getAuthHeaders } from '../auth/authService';
+import { getAuthHeaders } from '../auth/authServices';
 
 export const createProductService = async (
   data: ICreateProductSchemaType,

@@ -1,5 +1,5 @@
 import { jwtDecode } from 'jwt-decode';
-import { IDecodedToken, IToken } from './authService.type';
+import { IDecodedToken, IToken } from './authServices.type';
 
 const getTokenFromStorage = (): string | null => localStorage.getItem('token');
 

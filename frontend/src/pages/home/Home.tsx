@@ -1,7 +1,7 @@
 import UserSectionView from './userSection.view';
 import GuestSectionView from './guestSection.view';
 import { useHomeModel } from './home.model';
-import { logout } from '../../services/auth/authService';
+import { logout } from '../../services/auth/authServices';
 
 export default function Home() {
   const { isLoggedIn, ...rest } = useHomeModel();

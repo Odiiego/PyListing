@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ICreateListSchemaType } from '../../pages/home/home.type';
-import { IToken } from '../auth/authService.type';
+import { IToken } from '../auth/authServices.type';
 import { IShoppingList } from './listServices.type';
 
 export const createListService = async (

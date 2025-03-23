@@ -1,7 +1,7 @@
 import { ICreateBrandSchemaType } from '../../components/product/product.type';
-import { IToken } from '../auth/authService.type';
+import { IToken } from '../auth/authServices.type';
 import { IBrand } from './brandServices.type';
-import { getAuthHeaders } from '../auth/authService';
+import { getAuthHeaders } from '../auth/authServices';
 import api from '../utils/apiUtils';
 
 export const createBrandService = async (

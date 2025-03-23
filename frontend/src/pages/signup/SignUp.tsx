@@ -2,7 +2,7 @@ import { useSignUpModel } from './signup.model';
 import SignUpView from './signup.view';
 
 export default function SignUp() {
-  const methods = useSignUpModel();
+  const signUpModel = useSignUpModel();
 
-  return <SignUpView {...methods} />;
+  return <SignUpView {...signUpModel} />;
 }

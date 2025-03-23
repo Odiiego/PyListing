@@ -1,6 +1,6 @@
 import React from 'react';
 import { IBrandProps } from './brand.types';
-import { getUserToken } from '../../services/auth/authService';
+import { getUserToken } from '../../services/auth/authServices';
 import { deleteBrandService } from '../../services/brands/brandServices';
 
 export const useBrandModel = (props: IBrandProps) => {

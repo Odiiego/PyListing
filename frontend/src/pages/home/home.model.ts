@@ -3,13 +3,13 @@ import {
   getUserId,
   getUserToken,
   isTokenValid,
-} from '../../services/auth/authService';
+} from '../../services/auth/authServices';
 import { useForm } from 'react-hook-form';
 import { ICreateListSchemaType } from './home.type';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createListSchema } from './home.schemas';
 import { useMutation } from '@tanstack/react-query';
-import { IToken } from '../../services/auth/authService.type';
+import { IToken } from '../../services/auth/authServices.type';
 import {
   createListService,
   deleteListService,
