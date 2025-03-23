@@ -4,7 +4,7 @@ export interface IToken {
 }
 
 export interface IDecodedToken {
-  exp: string;
+  exp: number;
   id: number;
   sub: number;
 }
