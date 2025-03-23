@@ -4,43 +4,31 @@ import { signInSchema } from './signin.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { login } from '../../services/auth/authServices';
+import { getUserService } from '../../services/users/userServices';
+import { AxiosError } from 'axios';
 
 export const useSignInModel = () => {
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<ISignInSchemaType>({
     resolver: zodResolver(signInSchema),
   });
 
   const mutation = useMutation({
-    mutationFn: async (data: ISignInSchemaType) => {
-      const formData = new URLSearchParams({
-        username: data.username,
-        password: data.password,
-      });
-      const response = await axios.post(
-        'http://localhost:8000/auth/token',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        },
-      );
-      return response.data;
-    },
+    mutationFn: getUserService,
     onSuccess: (data) => {
       login(data);
-
       navigate('/');
     },
-    onError: (error) => {
-      console.error('Erro ao fazer login:', error);
+    onError: (error: AxiosError<{ message?: string }>) => {
+      console.error(
+        'Erro ao fazer login:',
+        error.response?.data?.message || error.message,
+      );
     },
   });
 
@@ -48,5 +36,11 @@ export const useSignInModel = () => {
     mutation.mutate(data);
   };
 
-  return { register, handleSubmit, onSubmit, errors, isSubmitting };
+  return {
+    register,
+    handleSubmit,
+    onSubmit,
+    errors,
+    isSubmitting: mutation.isPending,
+  };
 };
