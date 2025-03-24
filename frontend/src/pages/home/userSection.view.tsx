@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useHomeModel } from './home.model';
 
-type UserSectionViewProps = Omit<ReturnType<typeof useHomeModel>, 'isLoggedIn'>;
+type UserSectionViewProps = Omit<
+  ReturnType<typeof useHomeModel>,
+  'isLoggedIn' | 'handleLogout'
+>;
 
 export default function UserSectionView(props: UserSectionViewProps) {
   const {

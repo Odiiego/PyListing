@@ -3,6 +3,7 @@ import {
   getUserId,
   getUserToken,
   isTokenValid,
+  logout,
 } from '../../services/auth/authServices';
 import { useForm } from 'react-hook-form';
 import { ICreateListSchemaType } from './home.type';
@@ -16,8 +17,10 @@ import {
   getListsService,
 } from '../../services/lists/listServices';
 import { IShoppingList } from '../../services/lists/listServices.type';
+import { useNavigate } from 'react-router-dom';
 
 export function useHomeModel() {
+  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = React.useState(isTokenValid());
   const [userId, setUserId] = React.useState<undefined | number>(undefined);
   const [userToken, setUserToken] = React.useState<undefined | IToken>(
@@ -26,6 +29,18 @@ export function useHomeModel() {
   const [userShoppingLists, setUserShoppingLists] = React.useState<
     [] | IShoppingList[]
   >([]);
+
+  const handleLogout = () => {
+    logout();
+    setIsLoggedIn(false);
+    navigate('/auth/signin');
+  };
+
+  React.useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/auth/signin');
+    }
+  }, [isLoggedIn, navigate]);
 
   const deleteList = async (listId: number) => {
     deleteListService(listId, userToken);
@@ -80,6 +95,7 @@ export function useHomeModel() {
   return {
     deleteList,
     isLoggedIn,
+    handleLogout,
     userShoppingLists,
     register,
     handleSubmit,
