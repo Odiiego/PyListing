@@ -24,6 +24,24 @@ export const createProductService = async (
   }
 };
 
+export const getProductService = async (
+  productId: number,
+  userToken: undefined | IToken,
+): Promise<IProduct> => {
+  try {
+    if (!userToken) throw new Error('Token de usuário não encontrado');
+
+    const response = await api.get(`/products/${productId}`, {
+      headers: getAuthHeaders(userToken),
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar produto:', error);
+    throw new Error(error instanceof Error ? error.message : 'Erro inesperado');
+  }
+};
+
 export const deleteProductService = async (
   productId: number,
   userToken: undefined | IToken,
