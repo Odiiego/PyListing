@@ -30,13 +30,19 @@ export default function ProductView(props: ProductViewProps) {
       <form onSubmit={handleSubmit(onSubmit)} className="flex w-96">
         <div className="flex mb-4 w-full">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="quantity"
+              className="block text-sm font-medium text-gray-700"
+            >
               Quantidade
             </label>
             <input
+              id="quantity"
               {...register('quantity')}
               type="number"
-              className="w-full p-2 border rounded"
+              className={`w-full p-2 border rounded ${
+                errors.quantity ? 'border-red-500' : 'border-gray-300'
+              }`}
               placeholder="qtd"
             />
             {errors.quantity && (
@@ -45,14 +51,20 @@ export default function ProductView(props: ProductViewProps) {
           </div>
 
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="price"
+              className="block text-sm font-medium text-gray-700"
+            >
               Preço
             </label>
             <input
+              id="price"
               {...register('price')}
               type="number"
-              className="w-full p-2 border rounded"
-              placeholder="R$ xx"
+              className={`w-full p-2 border rounded ${
+                errors.price ? 'border-red-500' : 'border-gray-300'
+              }`}
+              placeholder="R$"
             />
             {errors.price && (
               <p className="text-red-500 text-xs">{errors.price.message}</p>
@@ -60,13 +72,19 @@ export default function ProductView(props: ProductViewProps) {
           </div>
 
           <div className="flex-2">
-            <label className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
               Nome da marca
             </label>
             <input
+              id="name"
               {...register('name')}
               type="text"
-              className="w-full p-2 border rounded"
+              className={`w-full p-2 border rounded ${
+                errors.name ? 'border-red-500' : 'border-gray-300'
+              }`}
               placeholder="nome da marca"
             />
             {errors.name && (

@@ -35,7 +35,7 @@ export function useHomeModel() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
   } = useForm<ICreateListSchemaType>({
     resolver: zodResolver(createListSchema),
@@ -85,6 +85,6 @@ export function useHomeModel() {
     handleSubmit,
     onSubmit,
     errors,
-    isSubmitting,
+    isSubmitting: mutation.isPending,
   };
 }

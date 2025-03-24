@@ -32,9 +32,7 @@ export const useSignInModel = () => {
     },
   });
 
-  const onSubmit = (data: ISignInSchemaType) => {
-    mutation.mutate(data);
-  };
+  const onSubmit = (data: ISignInSchemaType) => mutation.mutate(data);
 
   return {
     register,

@@ -1,64 +1,78 @@
-import axios from 'axios';
 import { ICreateListSchemaType } from '../../pages/home/home.type';
 import { IToken } from '../auth/authServices.type';
 import { IShoppingList } from './listServices.type';
+import api from '../utils/apiUtils';
+import { getAuthHeaders } from '../auth/authServices';
 
 export const createListService = async (
   data: ICreateListSchemaType,
   userId: undefined | number,
   userToken: undefined | IToken,
 ): Promise<IShoppingList> => {
-  const response = await axios.post(
-    `http://localhost:8000/lists/${userId}`,
-    data,
-    {
-      headers: {
-        Authorization: `Bearer ${userToken?.access_token}`,
-        'Content-Type': 'application/json',
-      },
-    },
-  );
+  try {
+    if (!userToken) throw new Error('Token de usuário não encontrado');
+    if (!userId) throw new Error('ID de usuário não pode ser indefinido');
 
-  return response.data;
+    const response = await api.post(`/lists/${userId}`, data, {
+      headers: getAuthHeaders(userToken),
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar lista:', error);
+    throw new Error(error instanceof Error ? error.message : 'Erro inesperado');
+  }
 };
 
 export const getListsService = async (
   userToken: undefined | IToken,
 ): Promise<IShoppingList[]> => {
-  const response = await axios.get(`http://localhost:8000/lists`, {
-    headers: {
-      Authorization: `Bearer ${userToken?.access_token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  try {
+    if (!userToken) throw new Error('Token de usuário não encontrado');
 
-  return response.data.shopping_lists;
+    const response = await api.get(`/lists`, {
+      headers: getAuthHeaders(userToken),
+    });
+
+    return response.data.shopping_lists;
+  } catch (error) {
+    console.error('Erro ao buscar listas:', error);
+    throw new Error(error instanceof Error ? error.message : 'Erro inesperado');
+  }
 };
 
 export const deleteListService = async (
   listId: number,
   userToken: undefined | IToken,
-) => {
-  const response = await axios.delete(`http://localhost:8000/lists/${listId}`, {
-    headers: {
-      Authorization: `Bearer ${userToken?.access_token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+): Promise<void> => {
+  try {
+    if (!userToken) throw new Error('Token de usuário não encontrado');
 
-  return response.data;
+    const response = await api.delete(`/lists/${listId}`, {
+      headers: getAuthHeaders(userToken),
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao excluir lista:', error);
+    throw new Error(error instanceof Error ? error.message : 'Erro inesperado');
+  }
 };
 
 export const getListService = async (
   listId: number,
   userToken: undefined | IToken,
 ): Promise<IShoppingList> => {
-  const response = await axios.get(`http://localhost:8000/lists/${listId}`, {
-    headers: {
-      Authorization: `Bearer ${userToken?.access_token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+  try {
+    if (!userToken) throw new Error('Token de usuário não encontrado');
 
-  return response.data;
+    const response = await api.get(`/lists/${listId}`, {
+      headers: getAuthHeaders(userToken),
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar lista:', error);
+    throw new Error(error instanceof Error ? error.message : 'Erro inesperado');
+  }
 };

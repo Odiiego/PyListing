@@ -10,15 +10,21 @@ import { createProductSchema } from './list.schema';
 import { useMutation } from '@tanstack/react-query';
 import { createProductService } from '../../services/products/productServices';
 import { IProduct } from '../../services/products/productServices.type';
+import { AxiosError } from 'axios';
 
 export const useListModel = () => {
-  const [list, setList] = React.useState<undefined | IShoppingList>();
-  const [productList, setProductList] = React.useState<[] | IProduct[]>([]);
   const { id } = useParams();
+  const token = getUserToken();
+
+  const [list, setList] = React.useState<undefined | IShoppingList>();
+  const [productList, setProductList] = React.useState<IProduct[]>(
+    list?.products || [],
+  );
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
   } = useForm<ICreateProductSchemaType>({
     resolver: zodResolver(createProductSchema),
@@ -27,31 +33,33 @@ export const useListModel = () => {
   React.useEffect(() => {
     const fetchList = async () => {
       try {
-        const list = await getListService(Number(id), getUserToken());
+        const list = await getListService(Number(id), token);
         setList(list);
         setProductList(list.products);
       } catch (error) {
-        console.error('Erro ao buscar listas:', error);
+        console.error('Erro ao buscar lista:', error);
       }
     };
     fetchList();
-  }, [id]);
+  }, [id, token]);
 
   const mutation = useMutation({
     mutationFn: async ({ data }: { data: ICreateProductSchemaType }) =>
-      createProductService(data, list?.id, getUserToken()),
+      createProductService(data, list?.id, token),
     onSuccess: (product) => {
       setProductList((products) => [...products, product]);
       reset();
     },
-    onError: (error) => {
-      console.error('Erro ao cadastrar lista:', error);
+    onError: (error: AxiosError<{ message?: string }>) => {
+      console.error(
+        'Erro ao cadastrar produto:',
+        error.response?.data?.message || error.message,
+      );
     },
   });
 
-  const onSubmit = (data: ICreateProductSchemaType) => {
+  const onSubmit = (data: ICreateProductSchemaType) =>
     mutation.mutate({ data });
-  };
 
   return {
     list,
@@ -60,7 +68,7 @@ export const useListModel = () => {
     register,
     handleSubmit,
     onSubmit,
-    isSubmitting,
+    isSubmitting: mutation.isPending,
     setProductList,
   };
 };

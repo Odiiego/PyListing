@@ -27,7 +27,7 @@ export const createBrandService = async (
 export const deleteBrandService = async (
   brandId: number,
   userToken: undefined | IToken,
-) => {
+): Promise<void> => {
   try {
     if (!userToken) throw new Error('Token de usuário não encontrado');
 

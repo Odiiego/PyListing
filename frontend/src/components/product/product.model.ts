@@ -13,10 +13,11 @@ export const useProductModel = (props: IProductProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [product, setProduct] = React.useState(props.product);
   const [brandList, setBrandList] = React.useState<IBrand[]>([]);
+  const token = getUserToken();
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
   } = useForm<ICreateBrandSchemaType>({
     resolver: zodResolver(createBrandSchema),
@@ -28,7 +29,7 @@ export const useProductModel = (props: IProductProps) => {
 
   const deleteProduct = async (productId: number) => {
     try {
-      await deleteProductService(productId, getUserToken());
+      await deleteProductService(productId, token);
       props.setProductList((products) =>
         products.filter((product) => product.id !== productId),
       );
@@ -39,7 +40,7 @@ export const useProductModel = (props: IProductProps) => {
 
   const mutation = useMutation({
     mutationFn: async ({ data }: { data: ICreateBrandSchemaType }) =>
-      createBrandService(data, product?.id, getUserToken()),
+      createBrandService(data, product?.id, token),
     onSuccess: (brand) => {
       setBrandList((brands) => [...brands, brand]);
       reset();
@@ -62,6 +63,6 @@ export const useProductModel = (props: IProductProps) => {
     register,
     handleSubmit,
     onSubmit,
-    isSubmitting,
+    isSubmitting: mutation.isPending,
   };
 };
