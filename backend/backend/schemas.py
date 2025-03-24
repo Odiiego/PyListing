@@ -20,21 +20,21 @@ class TokenData(BaseModel):
 
 class BrandSchema(BaseModel):
     name: str
-    quantity: float
-    price: float
+    quantity: Decimal
+    price: Decimal
 
 
 class UpdateBrandSchema(BaseModel):
     name: str | None = None
-    quantity: float | None = None
-    price: float | None = None
+    quantity: Decimal | None = None
+    price: Decimal | None = None
 
 
 class BrandPublic(BaseModel):
     id: int
     product_id: int
     name: str
-    quantity: float
+    quantity: Decimal
     price: Decimal
     unity_cost: Decimal
     predicted_cost: Decimal
@@ -71,19 +71,19 @@ class UserList(BaseModel):
 
 class ProductSchema(BaseModel):
     name: str
-    quantity: int
+    quantity: Decimal
 
 
 class UpdateProductSchema(BaseModel):
     name: str | None = None
-    quantity: int | None = None
+    quantity: Decimal | None = None
 
 
 class ProductPublic(BaseModel):
     id: int
     list_id: int
     name: str
-    quantity: int
+    quantity: Decimal
     brands: list[BrandPublic]
     best_price: Decimal | None = None
     best_offer: Decimal | None = None

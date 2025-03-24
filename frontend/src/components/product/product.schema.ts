@@ -5,7 +5,7 @@ export const createBrandSchema = z.object({
     .union([z.string(), z.number()])
     .transform((num) => Number(num))
     .refine((num) => !isNaN(num) && num > 0, {
-      message: 'A quantidade deve ser um número positivo',
+      message: 'A quantidade deve ser um número maior que zero',
     }),
   price: z
     .union([z.string(), z.number()])

@@ -22,7 +22,7 @@ def test_create_brand(mock_db_time, client, product, token):
         'id': 3,
         'product_id': product.id,
         'name': 'test',
-        'quantity': 1.0,
+        'quantity': '1.00',
         'price': '10.00',
         'unity_cost': '10.00',
         'predicted_cost': '20.00',
@@ -72,7 +72,7 @@ def test_update_brand(client, brand, token):
     )
 
     assert response.status_code == HTTPStatus.OK
-    assert response.json()['quantity'] == quantity
+    assert response.json()['quantity'] == '0.10'
     assert response.json()['unity_cost'] == '100.00'
     assert response.json()['predicted_cost'] == '200.00'
 
@@ -175,7 +175,7 @@ def test_get_brand(mock_db_time, session, client, brand, token):
         'id': 4,
         'product_id': 1,
         'name': 'test',
-        'quantity': 1.0,
+        'quantity': '1.00',
         'price': '10.00',
         'unity_cost': '10.00',
         'predicted_cost': '20.00',

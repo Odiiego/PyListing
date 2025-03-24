@@ -52,7 +52,7 @@ def create_brand(
         quantity=brand.quantity,
         price=brand.price,
         unity_cost=brand.price / brand.quantity,
-        predicted_cost=ceil(float(db_product.quantity) / brand.quantity)
+        predicted_cost=ceil(db_product.quantity / brand.quantity)
         * brand.price,
     )
 

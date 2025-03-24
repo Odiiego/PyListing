@@ -37,6 +37,8 @@ export default function ListView(props: ListViewProps) {
                 id="quantity"
                 {...register('quantity')}
                 type="number"
+                min="1"
+                step="0.01"
                 className={`w-full p-2 border rounded ${
                   errors.quantity ? 'border-red-500' : 'border-gray-300'
                 }`}

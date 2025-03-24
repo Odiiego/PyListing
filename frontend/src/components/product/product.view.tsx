@@ -40,6 +40,8 @@ export default function ProductView(props: ProductViewProps) {
               id="quantity"
               {...register('quantity')}
               type="number"
+              min="1"
+              step="0.01"
               className={`w-full p-2 border rounded ${
                 errors.quantity ? 'border-red-500' : 'border-gray-300'
               }`}
@@ -61,6 +63,8 @@ export default function ProductView(props: ProductViewProps) {
               id="price"
               {...register('price')}
               type="number"
+              min="0.01"
+              step="0.01"
               className={`w-full p-2 border rounded ${
                 errors.price ? 'border-red-500' : 'border-gray-300'
               }`}

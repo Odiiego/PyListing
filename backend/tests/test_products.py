@@ -17,7 +17,7 @@ def test_create_product(mock_db_time, client, shopping_list, token):
         'id': 1,
         'list_id': shopping_list.id,
         'name': 'test',
-        'quantity': 1,
+        'quantity': '1.00',
         'brands': [],
         'best_offer': None,
         'best_price': None,
@@ -53,7 +53,7 @@ def test_create_product_with_invalid_id(
 
 
 def test_update_product(client, product, token):
-    quantity = 5
+    quantity = 5.0
     response = client.put(
         f'/products/{product.id}',
         headers={'Authorization': f'Bearer {token}'},
@@ -61,7 +61,7 @@ def test_update_product(client, product, token):
     )
 
     assert response.status_code == HTTPStatus.OK
-    assert response.json()['quantity'] == quantity
+    assert response.json()['quantity'] == '5.00'
 
 
 def test_update_product_without_permission(client, product, other_user_token):
@@ -132,7 +132,7 @@ def test_get_product(mock_db_time, session, client, token, shopping_list):
         'id': 1,
         'list_id': 1,
         'name': 'test',
-        'quantity': 1,
+        'quantity': '1.00',
         'brands': [],
         'best_offer': None,
         'best_price': None,
@@ -182,7 +182,7 @@ def test_get_product_by_list(
             'id': 1,
             'list_id': 1,
             'name': 'test',
-            'quantity': 1,
+            'quantity': '1.00',
             'brands': [],
             'best_offer': None,
             'best_price': None,
