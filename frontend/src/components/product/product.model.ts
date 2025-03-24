@@ -12,7 +12,9 @@ import { IBrand } from '../../services/brands/brandServices.type';
 export const useProductModel = (props: IProductProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [product, setProduct] = React.useState(props.product);
-  const [brandList, setBrandList] = React.useState<IBrand[]>([]);
+  const [brandList, setBrandList] = React.useState<IBrand[]>(
+    product.brands || [],
+  );
   const token = getUserToken();
   const {
     register,
@@ -22,10 +24,6 @@ export const useProductModel = (props: IProductProps) => {
   } = useForm<ICreateBrandSchemaType>({
     resolver: zodResolver(createBrandSchema),
   });
-
-  React.useEffect(() => {
-    setBrandList(product.brands);
-  }, [product.brands]);
 
   const deleteProduct = async (productId: number) => {
     try {

@@ -82,11 +82,15 @@ export default function ListView(props: ListViewProps) {
 
         {productList.length ? (
           <ul className="space-y-2">
-            {productList.map((product) => (
-              <li key={product.id} className="p-2 border rounded text-gray-700">
-                <Product setProductList={setProductList} product={product} />
-              </li>
-            ))}
+            {productList
+              .sort((prodA, prodB) => prodA.id - prodB.id)
+              .map((product) => (
+                <Product
+                  key={product.id}
+                  setProductList={setProductList}
+                  product={product}
+                />
+              ))}
           </ul>
         ) : (
           <p className="text-gray-500 text-center">Lista de produtos vazia</p>

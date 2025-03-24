@@ -16,7 +16,7 @@ export default function ProductView(props: ProductViewProps) {
     isSubmitting,
   } = props;
   return (
-    <div>
+    <div className="p-2 border rounded text-gray-700">
       <p>
         <span className="m-2 mr-6">{product.quantity}</span>
         <span>{product.name}</span>
