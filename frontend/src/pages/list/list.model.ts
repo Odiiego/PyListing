@@ -11,6 +11,7 @@ import { useMutation } from '@tanstack/react-query';
 import { createProductService } from '../../services/products/productServices';
 import { IProduct } from '../../services/products/productServices.type';
 import { AxiosError } from 'axios';
+import { useInputNavigation } from '../../hooks/useInputNavigation';
 
 export const useListModel = () => {
   const { id } = useParams();
@@ -61,9 +62,12 @@ export const useListModel = () => {
   const onSubmit = (data: ICreateProductSchemaType) =>
     mutation.mutate({ data });
 
+  const handleKeyDown = useInputNavigation(handleSubmit, onSubmit);
+
   return {
     list,
     productList,
+    handleKeyDown,
     errors,
     register,
     handleSubmit,

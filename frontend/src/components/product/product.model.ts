@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createBrandSchema } from './product.schema';
 import { createBrandService } from '../../services/brands/brandServices';
 import { IBrand } from '../../services/brands/brandServices.type';
+import { useInputNavigation } from '../../hooks/useInputNavigation';
 
 export const useProductModel = (props: IProductProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -52,9 +53,12 @@ export const useProductModel = (props: IProductProps) => {
     mutation.mutate({ data });
   };
 
+  const handleKeyDown = useInputNavigation(handleSubmit, onSubmit);
+
   return {
     deleteProduct,
     brandList,
+    handleKeyDown,
     setBrandList,
     product,
     errors,

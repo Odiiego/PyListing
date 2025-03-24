@@ -7,6 +7,7 @@ export default function ListView(props: ListViewProps) {
   const {
     list,
     productList,
+    handleKeyDown,
     setProductList,
     errors,
     register,
@@ -37,8 +38,9 @@ export default function ListView(props: ListViewProps) {
                 id="quantity"
                 {...register('quantity')}
                 type="number"
-                min="1"
+                min="0.01"
                 step="0.01"
+                onKeyDown={handleKeyDown}
                 className={`w-full p-2 border rounded ${
                   errors.quantity ? 'border-red-500' : 'border-gray-300'
                 }`}
@@ -62,6 +64,7 @@ export default function ListView(props: ListViewProps) {
                 id="name"
                 {...register('name')}
                 type="text"
+                onKeyDown={handleKeyDown}
                 className={`w-full p-2 border rounded ${
                   errors.name ? 'border-red-500' : 'border-gray-300'
                 }`}

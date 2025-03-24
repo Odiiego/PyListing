@@ -7,6 +7,7 @@ export default function ProductView(props: ProductViewProps) {
   const {
     product,
     brandList,
+    handleKeyDown,
     deleteProduct,
     setBrandList,
     errors,
@@ -40,8 +41,9 @@ export default function ProductView(props: ProductViewProps) {
               id="quantity"
               {...register('quantity')}
               type="number"
-              min="1"
+              min="0.01"
               step="0.01"
+              onKeyDown={handleKeyDown}
               className={`w-full p-2 border rounded ${
                 errors.quantity ? 'border-red-500' : 'border-gray-300'
               }`}
@@ -65,6 +67,7 @@ export default function ProductView(props: ProductViewProps) {
               type="number"
               min="0.01"
               step="0.01"
+              onKeyDown={handleKeyDown}
               className={`w-full p-2 border rounded ${
                 errors.price ? 'border-red-500' : 'border-gray-300'
               }`}
@@ -86,6 +89,7 @@ export default function ProductView(props: ProductViewProps) {
               id="name"
               {...register('name')}
               type="text"
+              onKeyDown={handleKeyDown}
               className={`w-full p-2 border rounded ${
                 errors.name ? 'border-red-500' : 'border-gray-300'
               }`}
