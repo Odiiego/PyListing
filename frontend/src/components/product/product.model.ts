@@ -11,6 +11,7 @@ import { IBrand } from '../../services/brands/brandServices.type';
 import { useInputNavigation } from '../../hooks/useInputNavigation';
 
 export const useProductModel = (props: IProductProps) => {
+  const { activateProductForm, checkProductFormStatus } = props;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [product, setProduct] = React.useState(props.product);
   const [brandList, setBrandList] = React.useState<IBrand[]>(
@@ -65,6 +66,8 @@ export const useProductModel = (props: IProductProps) => {
     register,
     handleSubmit,
     onSubmit,
+    activateProductForm,
+    checkProductFormStatus,
     isSubmitting: mutation.isPending,
   };
 };

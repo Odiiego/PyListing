@@ -21,6 +21,9 @@ export const useListModel = () => {
   const [productList, setProductList] = React.useState<IProduct[]>(
     list?.products || [],
   );
+  const [activeProductForm, setActiveProductForm] = React.useState<
+    undefined | number
+  >();
 
   const {
     register,
@@ -64,6 +67,14 @@ export const useListModel = () => {
 
   const handleKeyDown = useInputNavigation(handleSubmit, onSubmit);
 
+  const activateProductForm = (productId: number | undefined) => {
+    setActiveProductForm(productId);
+  };
+
+  const checkProductFormStatus = (productId: number) => {
+    return productId === activeProductForm;
+  };
+
   return {
     list,
     productList,
@@ -74,5 +85,7 @@ export const useListModel = () => {
     onSubmit,
     isSubmitting: mutation.isPending,
     setProductList,
+    activateProductForm,
+    checkProductFormStatus,
   };
 };

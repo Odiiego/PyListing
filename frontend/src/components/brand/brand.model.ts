@@ -6,7 +6,10 @@ import { deleteBrandService } from '../../services/brands/brandServices';
 export const useBrandModel = (props: IBrandProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [brand, setBrand] = React.useState(props.brand);
+  const [info, setInfo] = React.useState(true);
   const token = getUserToken();
+
+  const toggleInfo = () => setInfo((i) => !i);
 
   const deleteBrand = async (brandId: number) => {
     try {
@@ -19,5 +22,5 @@ export const useBrandModel = (props: IBrandProps) => {
     }
   };
 
-  return { brand, deleteBrand };
+  return { brand, deleteBrand, info, toggleInfo };
 };
